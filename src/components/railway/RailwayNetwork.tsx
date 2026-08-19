@@ -6,7 +6,7 @@ import {
   Pause, 
   RotateCcw, 
   Clock, 
-  Sparkles, 
+  Cpu, 
   Radio, 
   Info 
 } from 'lucide-react';
@@ -620,21 +620,21 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
               disabled={isOptimizing}
               className="w-full py-2.5 px-3 rounded-lg bg-[#170C79] hover:bg-[#56B6C6] hover:text-[#170C79] text-[#EFE3CA] font-mono-tech font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
             >
-              <Sparkles className={`w-3.5 h-3.5 text-[#56B6C6] ${isOptimizing ? 'animate-spin' : ''}`} />
+              <Cpu className="w-3.5 h-3.5 text-[#56B6C6]" />
               <span>{isOptimizing ? 'SOLVING...' : 'TRIGGER AI OPTIMIZE'}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Hover Station Inspector Tooltip */}
+      {/* Hover Station Inspector Tooltip (Responsive bounds) */}
       {hoveredStation && (
-        <div className="absolute top-20 right-8 bg-[#FFFFFF] border-2 border-[#8ACBD0] rounded-xl p-4 shadow-xl z-30 min-w-[240px] pointer-events-none text-xs font-mono-tech">
+        <div className="absolute top-20 right-2 sm:right-8 bg-[#FFFFFF] border-2 border-[#8ACBD0] rounded-xl p-3 sm:p-4 shadow-xl z-30 min-w-[220px] max-w-[calc(100vw-2rem)] pointer-events-none text-xs font-mono-tech">
           <div className="flex items-center justify-between border-b border-[#8ACBD0]/40 pb-1.5 mb-2">
-            <span className="font-bold text-[#170C79] uppercase text-sm font-mono-tech">
+            <span className="font-bold text-[#170C79] uppercase text-xs sm:text-sm font-mono-tech">
               {hoveredStation.name}
             </span>
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+            <span className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded border ${
               hoveredStation.status === 'SURGE_CRITICAL' 
                 ? 'bg-[#C53030]/15 text-[#C53030] border-[#C53030]/30' 
                 : 'bg-[#8ACBD0]/30 text-[#170C79] border-[#8ACBD0]'

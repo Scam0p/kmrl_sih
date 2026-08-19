@@ -13,10 +13,10 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
   return (
     <>
       {/* 1. Situation Summary Quick Button — Bottom Left Corner */}
-      <div className="fixed bottom-4 left-4 z-40 select-none font-mono-tech">
+      <div className="fixed bottom-16 sm:bottom-4 left-3 sm:left-4 z-40 select-none font-mono-tech">
         <button
           onClick={onOpenSummary}
-          className="px-3.5 py-2 rounded-xl bg-[#170C79] hover:bg-[#22158E] text-[#EFE3CA] hover:text-[#D9A24B] border-2 border-[#56B6C6]/50 shadow-xl transition-colors cursor-pointer flex items-center gap-2 text-xs font-bold"
+          className="px-3 sm:px-3.5 py-2 rounded-xl bg-[#170C79] hover:bg-[#22158E] text-[#EFE3CA] hover:text-[#D9A24B] border-2 border-[#56B6C6]/50 shadow-xl transition-colors cursor-pointer flex items-center gap-1.5 sm:gap-2 text-xs font-bold"
           title="Open Live Operations Summary & Reports"
           aria-label="Open Operations Summary"
         >
@@ -26,10 +26,10 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
       </div>
 
       {/* 2. AI Assistant / Chatbot Quick Button — Bottom Right Corner */}
-      <div className="fixed bottom-4 right-4 z-40 select-none font-mono-tech">
+      <div className="fixed bottom-16 sm:bottom-4 right-3 sm:right-4 z-40 select-none font-mono-tech">
         <button
           onClick={onOpenAssistant}
-          className="px-3.5 py-2 rounded-xl bg-[#170C79] hover:bg-[#22158E] text-[#EFE3CA] hover:text-[#D9A24B] border-2 border-[#56B6C6]/50 shadow-xl transition-colors cursor-pointer flex items-center gap-2 text-xs font-bold"
+          className="px-3 sm:px-3.5 py-2 rounded-xl bg-[#170C79] hover:bg-[#22158E] text-[#EFE3CA] hover:text-[#D9A24B] border-2 border-[#56B6C6]/50 shadow-xl transition-colors cursor-pointer flex items-center gap-1.5 sm:gap-2 text-xs font-bold"
           title="Open KMRL AI Operations Assistant"
           aria-label="Open AI Operations Assistant"
         >

@@ -110,8 +110,8 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
       </div>
 
       {/* Main Quantitative Comparison Table */}
-      <div className="bg-[#FFFFFF] rounded-xl p-3 md:p-4 border border-[#8ACBD0] overflow-x-auto shadow-xs">
-        <table className="w-full text-left font-mono-tech text-xs border-collapse">
+      <div className="bg-[#FFFFFF] rounded-xl p-3 md:p-4 border border-[#8ACBD0] overflow-x-auto shadow-xs scrollbar-thin">
+        <table className="w-full text-left font-mono-tech text-xs border-collapse min-w-[620px]">
           <thead>
             <tr className="bg-[#170C79] text-[#EFE3CA] text-[10px] uppercase">
               <th className="py-3 px-4 font-bold rounded-l-lg">OPERATIONAL METRIC</th>

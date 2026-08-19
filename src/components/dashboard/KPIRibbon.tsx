@@ -53,33 +53,33 @@ export const KPIRibbon: React.FC<KPIRibbonProps> = ({ kpis, currentCase }) => {
       id: 'pax',
       label: 'HOURLY COMMUTERS',
       value: kpis.paxServedTotal.toLocaleString(),
-      delta: '+4,200 pax throughput',
+      delta: '+4,200 throughput',
       deltaColor: 'text-[#170C79]',
       icon: Users
     }
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3.5 w-full">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.id}
-            className="rounded-xl p-3.5 bg-[#EFE3CA] border border-[#8ACBD0] hover:border-[#56B6C6] transition-colors shadow-xs flex flex-col justify-between"
+            className="rounded-xl p-2.5 sm:p-3.5 bg-[#EFE3CA] border border-[#8ACBD0] hover:border-[#56B6C6] transition-colors shadow-xs flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[9px] font-mono-tech uppercase tracking-wider text-[#2C2B68] font-bold truncate max-w-[110px]">
+            <div className="flex items-center justify-between mb-1 sm:mb-2">
+              <span className="text-[8.5px] sm:text-[9px] font-mono-tech uppercase tracking-wider text-[#2C2B68] font-bold truncate max-w-[100px] sm:max-w-[120px]">
                 {card.label}
               </span>
-              <Icon className="w-3.5 h-3.5 text-[#56B6C6]" />
+              <Icon className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#56B6C6] flex-shrink-0" />
             </div>
 
             <div>
-              <span className="font-mono-tech font-bold text-xl md:text-2xl text-[#170C79] tracking-tight block">
+              <span className="font-mono-tech font-bold text-lg sm:text-xl lg:text-2xl text-[#170C79] tracking-tight block">
                 {card.value}
               </span>
-              <span className={`text-[9.5px] font-mono-tech font-bold ${card.deltaColor} block mt-1`}>
+              <span className={`text-[8.5px] sm:text-[9.5px] font-mono-tech font-bold ${card.deltaColor} block mt-0.5 sm:mt-1 truncate`}>
                 {card.delta}
               </span>
             </div>

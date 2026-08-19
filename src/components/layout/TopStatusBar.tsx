@@ -5,14 +5,9 @@ import {
   RotateCcw, 
   Cpu, 
   ShieldAlert, 
-  Clock, 
   User, 
   LogOut, 
-  ShieldCheck, 
-  ChevronDown, 
-  Wrench, 
-  Building2, 
-  Train 
+  ChevronDown 
 } from 'lucide-react';
 import { CaseType, Train as TrainType } from '../../types/simulation';
 import { useAuth } from '../../context/AuthContext';
@@ -35,8 +30,6 @@ interface TopStatusBarProps {
 export const TopStatusBar: React.FC<TopStatusBarProps> = ({
   simTime,
   currentCase,
-  activeTrainsCount,
-  totalTrainsCount,
   trains,
   onSelectTrain,
   onReset,
@@ -73,21 +66,21 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#170C79] border-b-2 border-[#56B6C6]/40 px-3 sm:px-6 md:px-8 py-2 flex items-center justify-between gap-2 sm:gap-4 text-xs font-mono-tech select-none shadow-lg text-[#EFE3CA]">
+    <header className="sticky top-0 z-40 w-full bg-[#170C79] border-b-2 border-[#56B6C6]/40 px-2.5 sm:px-6 md:px-8 py-2 flex items-center justify-between gap-1.5 sm:gap-4 text-xs font-mono-tech select-none shadow-lg text-[#EFE3CA]">
       {/* Left: Menu Trigger + KMRL Brand Identity */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0 min-w-0">
         {/* Sliding Menu Trigger Button */}
         <button
           onClick={onToggleMenu}
-          className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-all duration-200 cursor-pointer flex items-center gap-1.5 font-bold shadow-xs active:scale-95"
+          className="px-2 sm:px-3 py-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-colors cursor-pointer flex items-center gap-1 sm:gap-1.5 font-bold shadow-xs"
           title="Open KMRL Operations Navigation Menu"
           aria-label="Open Operations Menu"
         >
-          <Menu className="w-4 h-4 text-[#56B6C6] group-hover:text-[#170C79]" />
+          <Menu className="w-4 h-4 text-[#56B6C6]" />
           <span className="hidden sm:inline text-xs tracking-wider">MENU</span>
         </button>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden border border-[#56B6C6]/50 bg-[#22158E] flex-shrink-0 shadow-xs">
             <img
               src="/logo.png"
@@ -96,8 +89,8 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
             />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono-tech font-bold text-xs sm:text-sm text-[#EFE3CA] tracking-wide">
+            <div className="flex items-center gap-1.5">
+              <span className="font-mono-tech font-bold text-xs sm:text-sm text-[#EFE3CA] tracking-wide whitespace-nowrap">
                 KMRL <span className="text-[#56B6C6] font-normal hidden md:inline">| OPERATIONS OCC</span>
               </span>
               <span className="hidden lg:inline-block text-[8.5px] font-mono-tech px-1.5 py-0.2 rounded bg-[#56B6C6] text-[#170C79] font-bold">
@@ -108,17 +101,17 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
         </div>
       </div>
 
-      {/* Center: Global Prominent Train Search Bar */}
-      <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md mx-2">
+      {/* Center: Global Prominent Train Search Bar (Responsive flex) */}
+      <div className="flex-1 min-w-0 max-w-full sm:max-w-xs md:max-w-md mx-1 sm:mx-2">
         <TrainSearchBar
           trains={trains}
           onSelectTrain={onSelectTrain}
         />
       </div>
 
-      {/* Right: Operational Paradigm badge, Employee Auth Profile, Reset Action */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-        {/* Center: Operational Mode Pill */}
+      {/* Right: Employee Auth Profile & Reset Action */}
+      <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+        {/* Paradigm Mode Pill (Desktop) */}
         <div className="hidden 2xl:flex items-center gap-2 px-3 py-1 rounded-full bg-[#22158E] border border-[#56B6C6]/40 text-xs font-mono-tech shadow-xs">
           <span className="text-[#EFE3CA]/70 font-bold text-[10px]">MODE:</span>
           {currentCase === 'ai' ? (
@@ -135,12 +128,13 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
             </span>
           )}
         </div>
+
         {/* Authenticated Employee Profile Pill */}
         {user && (
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen(prev => !prev)}
-              className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#22158E] hover:bg-[#120963] border border-[#56B6C6]/40 text-left transition-colors cursor-pointer shadow-xs"
+              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 rounded-lg bg-[#22158E] hover:bg-[#120963] border border-[#56B6C6]/40 text-left transition-colors cursor-pointer shadow-xs"
               title="Click to view Officer Profile & Switch Roles"
             >
               <div className="w-6 h-6 rounded-full bg-[#56B6C6] text-[#170C79] font-bold text-[10px] flex items-center justify-center flex-shrink-0">
@@ -157,12 +151,12 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
               <span className={`hidden sm:inline-block px-1.5 py-0.2 rounded text-[8.5px] font-bold border ${getRoleBadgeStyle(user.role)}`}>
                 {user.role}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#56B6C6]/80" />
+              <ChevronDown className="w-3 h-3 text-[#56B6C6]/80 hidden sm:inline" />
             </button>
 
             {/* Profile Dropdown Popover */}
             {isProfileOpen && (
-              <div className="absolute right-0 top-full mt-2 w-72 bg-[#120963] border-2 border-[#56B6C6] rounded-xl p-3 shadow-2xl z-50 text-xs font-mono-tech space-y-3 animate-in fade-in">
+              <div className="absolute right-0 top-full mt-2 w-64 sm:w-72 bg-[#120963] border-2 border-[#56B6C6] rounded-xl p-3 shadow-2xl z-50 text-xs font-mono-tech space-y-3 animate-in fade-in">
                 {/* Officer Details */}
                 <div className="pb-2.5 border-b border-[#56B6C6]/30">
                   <div className="flex items-center justify-between">
@@ -170,7 +164,6 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
                       OFFICER CREDENTIALS
                     </span>
                     <span className="flex items-center gap-1 text-[9px] text-[#56B6C6] font-bold">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#56B6C6] animate-pulse"></span>
                       ACTIVE OCC
                     </span>
                   </div>
@@ -232,7 +225,7 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
         {/* Reset Simulation Button */}
         <button
           onClick={onReset}
-          className="p-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
+          className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
           title="Reset Simulation to 08:00 Initial State"
           aria-label="Reset simulation"
         >
@@ -243,8 +236,3 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
     </header>
   );
 };
-
-
-
-
-

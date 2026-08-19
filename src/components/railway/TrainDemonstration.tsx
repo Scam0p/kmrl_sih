@@ -218,13 +218,28 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                   <button
                     key={tab}
                     onClick={() => setActiveCarriageTab(tab)}
-                    className={`px-3 py-1 rounded transition-colors cursor-pointer font-bold ${
+                    className={`px-2 sm:px-3 py-1 rounded transition-colors cursor-pointer font-bold text-[11px] sm:text-xs ${
                       activeCarriageTab === tab
                         ? 'bg-[#170C79] text-[#EFE3CA] shadow-xs'
                         : 'text-[#2C2B68] hover:text-[#170C79]'
                     }`}
                   >
-                    {tab === 'DMC1' ? 'CAR 1 (DMC-A)' : tab === 'TC' ? 'CAR 2 (TRAILER)' : 'CAR 3 (DMC-B)'}
+                    {tab === 'DMC1' ? (
+                      <>
+                        <span className="sm:hidden">CAR 1</span>
+                        <span className="hidden sm:inline">CAR 1 (DMC-A)</span>
+                      </>
+                    ) : tab === 'TC' ? (
+                      <>
+                        <span className="sm:hidden">CAR 2</span>
+                        <span className="hidden sm:inline">CAR 2 (TRAILER)</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="sm:hidden">CAR 3</span>
+                        <span className="hidden sm:inline">CAR 3 (DMC-B)</span>
+                      </>
+                    )}
                   </button>
                 ))}
               </div>
