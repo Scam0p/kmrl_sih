@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowDown, Cpu, Activity, ShieldAlert } from 'lucide-react';
 import { CaseType } from '../../types/simulation';
+import { KMRLParallaxLayer } from '../parallax/KMRLParallaxLayer';
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -19,24 +20,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       id="hero-section" 
       className="relative min-h-[60vh] sm:min-h-[64vh] flex flex-col justify-center items-center px-3 sm:px-6 md:px-12 py-10 sm:py-14 overflow-hidden border-b border-[#8ACBD0]/40 bg-[#F6F1E6]"
     >
-      {/* Background Metro Track Schematic */}
-      <div className="absolute inset-0 pointer-events-none opacity-25 overflow-hidden flex items-center justify-center">
-        <svg className="w-full h-full min-w-[1200px]" viewBox="0 0 1200 500" fill="none">
-          <path
-            d="M 50 250 C 200 250, 250 160, 400 160 C 550 160, 650 340, 800 340 C 950 340, 1000 250, 1150 250"
-            stroke="#170C79"
-            strokeWidth="2.5"
-            strokeDasharray="6 6"
-          />
-          <path
-            d="M 120 100 C 220 100, 260 220, 350 220 L 450 220"
-            stroke="#56B6C6"
-            strokeWidth="2"
-            strokeDasharray="4 4"
-            opacity="0.7"
-          />
-        </svg>
-      </div>
+      {/* Lightweight 2D Parallax Visual Depth Layer (3 Depth Planes) */}
+      <KMRLParallaxLayer />
 
       {/* Hero Content Container */}
       <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center gap-4 sm:gap-6 w-full">
