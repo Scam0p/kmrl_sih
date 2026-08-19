@@ -61,9 +61,9 @@ export const DecisionFeed: React.FC<DecisionFeedProps> = ({ logs }) => {
       </div>
 
       {/* Inner Inset Viewport Pane */}
-      <div className="bg-[#EFE3CA] rounded-xl p-4 md:p-5 border border-[#8ACBD0] flex flex-col justify-between flex-1 shadow-inner">
+      <div className="bg-[#EFE3CA] rounded-xl p-4 md:p-5 border border-[#8ACBD0] flex flex-col justify-start flex-1 shadow-inner">
         {/* Stream Status Sub-header */}
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#8ACBD0]">
+        <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#8ACBD0]">
           <span className="text-[10px] font-mono-tech text-[#2C2B68] font-bold">
             REAL-TIME AUDIT LOG
           </span>

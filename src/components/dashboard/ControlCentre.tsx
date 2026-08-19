@@ -14,7 +14,6 @@ import { RailwayNetwork } from '../railway/RailwayNetwork';
 import { TrainDemonstration } from '../railway/TrainDemonstration';
 import { AIEnginePanel } from './AIEnginePanel';
 import { DecisionFeed } from './DecisionFeed';
-import { FleetOverview } from '../fleet/FleetOverview';
 import { ScenarioControlCenter } from '../scenarios/ScenarioControlCenter';
 import { PerformanceComparison } from '../comparison/PerformanceComparison';
 import { TeamSection } from '../team/TeamSection';
@@ -182,31 +181,7 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
         </div>
       </section>
 
-      {/* 5. Fleet Operational Roster */}
-      <section id="fleet-section" className="space-y-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
-            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
-              ROLLING STOCK ROSTER
-            </span>
-          </div>
-          <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
-            FLEET READINESS & TELEMETRY MATRIX
-          </h2>
-          <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
-            Individual trainset health scores, maintenance schedules, traction power draw, and depot turnout status
-          </p>
-        </div>
-
-        <FleetOverview
-          trains={trains}
-          onSelectTrain={onSelectTrain}
-          selectedTrain={selectedTrain}
-        />
-      </section>
-
-      {/* 6. Contingency Scenarios Simulator */}
+      {/* 5. Contingency Scenarios Simulator */}
       <section id="scenarios-section" className="space-y-4">
         <div>
           <div className="flex items-center gap-2 mb-1">

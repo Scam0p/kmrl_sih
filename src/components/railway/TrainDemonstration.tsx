@@ -9,13 +9,13 @@ interface TrainDemonstrationProps {
 }
 
 export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
-  trains,
-  selectedTrain,
-  onSelectTrain
+  trains
 }) => {
-  // If no train is selected, default to the first active/inducting train or T01
-  const activeTrain = selectedTrain || trains.find(t => t.status === 'IN_SERVICE' || t.status === 'INDUCTING') || trains[0];
+  // Local state for demonstrated trainset so clicking T01..T08 updates this card only without opening modal popup
+  const [selectedTrainId, setSelectedTrainId] = useState<string>(trains[0]?.id || 'T01');
   const [activeCarriageTab, setActiveCarriageTab] = useState<'DMC1' | 'TC' | 'DMC2'>('DMC1');
+
+  const activeTrain = trains.find(t => t.id === selectedTrainId) || trains[0];
 
   if (!activeTrain) return null;
 
@@ -23,16 +23,21 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
 
   const getStatusColor = (status: Train['status']) => {
     switch (status) {
-      case 'IN_SERVICE': return { bg: 'bg-[#2E8B57]/15', text: 'text-[#2E8B57]', border: 'border-[#2E8B57]/40', label: 'IN SERVICE' };
-      case 'INDUCTING': return { bg: 'bg-[#56B6C6]/20', text: 'text-[#170C79]', border: 'border-[#56B6C6]/50', label: 'AI INDUCTING' };
-      case 'READY_INDUCTION': return { bg: 'bg-[#56B6C6]/20', text: 'text-[#170C79]', border: 'border-[#56B6C6]/50', label: 'HOT RESERVE' };
-      case 'STANDBY': return { bg: 'bg-[#8ACBD0]/30', text: 'text-[#170C79]', border: 'border-[#8ACBD0]', label: 'DEPOT STANDBY' };
-      case 'MAINTENANCE': return { bg: 'bg-[#C53030]/15', text: 'text-[#C53030]', border: 'border-[#C53030]/40', label: 'MAINTENANCE' };
-      default: return { bg: 'bg-[#EFE3CA]', text: 'text-[#2C2B68]', border: 'border-[#8ACBD0]', label: status };
+      case 'IN_SERVICE': return { bg: 'bg-[#2E8B57]/15', text: 'text-[#2E8B57]', border: 'border-[#2E8B57]/40', stripe: '#2E8B57', label: 'IN SERVICE' };
+      case 'INDUCTING': return { bg: 'bg-[#56B6C6]/20', text: 'text-[#170C79]', border: 'border-[#56B6C6]/50', stripe: '#56B6C6', label: 'AI INDUCTING' };
+      case 'READY_INDUCTION': return { bg: 'bg-[#D9A24B]/20', text: 'text-[#170C79]', border: 'border-[#D9A24B]/50', stripe: '#D9A24B', label: 'HOT RESERVE' };
+      case 'STANDBY': return { bg: 'bg-[#8ACBD0]/30', text: 'text-[#170C79]', border: 'border-[#8ACBD0]', stripe: '#8ACBD0', label: 'DEPOT STANDBY' };
+      case 'MAINTENANCE': return { bg: 'bg-[#C53030]/15', text: 'text-[#C53030]', border: 'border-[#C53030]/40', stripe: '#C53030', label: 'MAINTENANCE' };
+      default: return { bg: 'bg-[#EFE3CA]', text: 'text-[#2C2B68]', border: 'border-[#8ACBD0]', stripe: '#170C79', label: status };
     }
   };
 
   const statusStyle = getStatusColor(activeTrain.status);
+
+  // Carriage-specific dynamic calculations
+  const car1Load = Math.round(activeTrain.passengerLoad * 0.3);
+  const car2Load = Math.round(activeTrain.passengerLoad * 0.4);
+  const car3Load = Math.round(activeTrain.passengerLoad * 0.3);
 
   return (
     <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm space-y-3">
@@ -53,29 +58,34 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                 ALSTOM METROPOLIS ROLLING STOCK ARCHITECTURE
               </h3>
               <span className="text-[9px] font-mono-tech px-2 py-0.5 rounded bg-[#EFE3CA] text-[#170C79] border border-[#8ACBD0] font-bold">
-                GoA2 CBTC • 750V DC
+                {activeTrain.id} • {activeTrain.driverStatus} • 750V DC
               </span>
             </div>
             <p className="font-inter text-xs text-[#2C2B68] font-medium">
-              Spatial trainset breakdown • Real-time telemetry, passenger distribution & traction sub-systems
+              Real-time 3-car formation schematic, sub-system diagnostics & carriage telemetry
             </p>
           </div>
         </div>
 
-        {/* Quick Train Selector Strip */}
+        {/* Quick Train Selector Strip (Updates Local Demonstration Card Dynamically) */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 font-mono-tech text-xs">
           {trains.map((t) => (
             <button
               key={t.id}
-              onClick={() => onSelectTrain(t)}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer text-xs flex items-center gap-1 ${
+              onClick={() => setSelectedTrainId(t.id)}
+              className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer text-xs flex items-center gap-1.5 ${
                 activeTrain.id === t.id
-                  ? 'bg-[#170C79] text-[#EFE3CA] shadow-xs'
+                  ? 'bg-[#170C79] text-[#EFE3CA] shadow-xs scale-105'
                   : 'bg-[#EFE3CA] text-[#2C2B68] hover:text-[#170C79] hover:bg-[#FFFFFF] border border-[#8ACBD0]'
               }`}
             >
               <span>{t.id}</span>
-              <span className={`w-1.5 h-1.5 rounded-full ${t.status === 'IN_SERVICE' ? 'bg-[#2E8B57]' : t.status === 'INDUCTING' ? 'bg-[#56B6C6]' : 'bg-[#170C79]/40'}`}></span>
+              <span className={`w-1.5 h-1.5 rounded-full ${
+                t.status === 'IN_SERVICE' ? 'bg-[#2E8B57]' : 
+                t.status === 'INDUCTING' ? 'bg-[#56B6C6]' : 
+                t.status === 'MAINTENANCE' ? 'bg-[#C53030]' : 
+                t.status === 'READY_INDUCTION' ? 'bg-[#D9A24B]' : 'bg-[#170C79]/40'
+              }`}></span>
             </button>
           ))}
 
@@ -150,7 +160,7 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     <Shield className="w-3.5 h-3.5 text-[#56B6C6]" />
                     <span>HEALTH SCORE</span>
                   </div>
-                  <span className="text-base font-bold text-[#170C79]">
+                  <span className={`text-base font-bold ${activeTrain.healthScorePct < 80 ? 'text-[#C53030]' : 'text-[#170C79]'}`}>
                     {activeTrain.healthScorePct}%
                   </span>
                 </div>
@@ -200,14 +210,14 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
             </div>
           </div>
 
-          {/* ZONE 2: SPACIOUS TRAIN VISUAL DEMONSTRATION & SCHEMATIC (8 COLS) */}
+          {/* ZONE 2: DYNAMIC 3-CAR TRAINSET VISUAL DEMONSTRATION (8 COLS) */}
           <div className="lg:col-span-8 bg-[#FFFFFF] rounded-xl p-5 md:p-6 border border-[#8ACBD0] flex flex-col justify-between shadow-xs space-y-6">
             <div>
               {/* Visual Title and Carriage Selector Tabs */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#8ACBD0]/40">
                 <div>
                   <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#56B6C6] font-bold block">
-                    SPATIAL ENGINEERING VISUALIZATION
+                    SPATIAL ENGINEERING VISUALIZATION • {activeTrain.id} ({activeTrain.name})
                   </span>
                   <h4 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79]">
                     3-CAR TRAINSET FORMATION SCHEMATIC
@@ -231,7 +241,7 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                 </div>
               </div>
 
-              {/* Spacious 3-Car Metro Train Illustration SVG with generous breathing room */}
+              {/* Dynamic 3-Car Metro Train Illustration SVG */}
               <div className="py-8 px-2 flex items-center justify-center">
                 <svg
                   viewBox="0 0 760 180"
@@ -278,21 +288,27 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     <path
                       d="M 50 135 L 50 82 Q 50 68 70 65 L 250 65 L 250 135 Z"
                       fill="#FFFFFF"
-                      stroke={activeCarriageTab === 'DMC1' ? '#56B6C6' : '#170C79'}
+                      stroke={activeCarriageTab === 'DMC1' ? statusStyle.stripe : '#170C79'}
                       strokeWidth={activeCarriageTab === 'DMC1' ? '3' : '2'}
                     />
 
-                    {/* Aerodynamic Nose Wedge */}
+                    {/* Aerodynamic Nose Wedge with Dynamic Train Badge */}
                     <path
                       d="M 50 85 Q 36 105 48 135 Z"
-                      fill="#56B6C6"
+                      fill={statusStyle.stripe}
                     />
 
-                    {/* Metro Livery Stripe */}
-                    <rect x="52" y="115" width="198" height="6" fill="#170C79" />
-                    <rect x="52" y="121" width="198" height="3" fill="#56B6C6" />
+                    {/* Dynamic Train ID Label on Front Cab */}
+                    <rect x="52" y="88" width="22" height="12" rx="2" fill="#170C79" />
+                    <text x="63" y="97" fill="#EFE3CA" fontSize="8" fontWeight="bold" fontFamily="JetBrains Mono" textAnchor="middle">
+                      {activeTrain.id}
+                    </text>
 
-                    {/* Windshield & Side Windows */}
+                    {/* Metro Livery Dynamic Stripe */}
+                    <rect x="52" y="115" width="198" height="6" fill="#170C79" />
+                    <rect x="52" y="121" width="198" height="3" fill={statusStyle.stripe} />
+
+                    {/* Windshield & Side Windows with dynamic occupancy load indicator */}
                     <path d="M 52 82 Q 44 95 56 104 L 75 104 L 75 80 Z" fill="url(#windowTint)" stroke="#170C79" strokeWidth="1" />
                     <rect x="88" y="80" width="22" height="24" rx="2" fill="url(#windowTint)" stroke="#170C79" strokeWidth="0.8" />
                     <rect x="120" y="80" width="22" height="24" rx="2" fill="url(#windowTint)" stroke="#170C79" strokeWidth="0.8" />
@@ -303,9 +319,9 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     {/* Passenger Doors */}
                     <rect x="146" y="75" width="10" height="60" fill="#EFE3CA" stroke="#170C79" strokeWidth="0.8" />
 
-                    {/* Carriage Label */}
+                    {/* Carriage Label & Dynamic PAX load */}
                     <text x="150" y="55" fill="#170C79" fontSize="9" fontWeight="bold" fontFamily="JetBrains Mono" textAnchor="middle">
-                      CAR 1 (DMC-A)
+                      CAR 1 (DMC-A) • {car1Load} PAX
                     </text>
                   </g>
 
@@ -318,7 +334,7 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     <path
                       d="M 360 65 L 375 38 L 395 38 L 410 65"
                       fill="none"
-                      stroke="#56B6C6"
+                      stroke={statusStyle.stripe}
                       strokeWidth="2.5"
                       strokeLinecap="round"
                     />
@@ -338,13 +354,13 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                       height="70"
                       rx="4"
                       fill="#FFFFFF"
-                      stroke={activeCarriageTab === 'TC' ? '#56B6C6' : '#170C79'}
+                      stroke={activeCarriageTab === 'TC' ? statusStyle.stripe : '#170C79'}
                       strokeWidth={activeCarriageTab === 'TC' ? '3' : '2'}
                     />
 
                     {/* Metro Livery Stripe */}
                     <rect x="260" y="115" width="250" height="6" fill="#170C79" />
-                    <rect x="260" y="121" width="250" height="3" fill="#56B6C6" />
+                    <rect x="260" y="121" width="250" height="3" fill={statusStyle.stripe} />
 
                     {/* Saloon Windows */}
                     <rect x="274" y="80" width="24" height="24" rx="2" fill="url(#windowTint)" stroke="#170C79" strokeWidth="0.8" />
@@ -357,9 +373,9 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     {/* Saloon Doors */}
                     <rect x="374" y="75" width="20" height="60" fill="#EFE3CA" stroke="#170C79" strokeWidth="0.8" />
 
-                    {/* Carriage Label */}
+                    {/* Carriage Label & Dynamic PAX load */}
                     <text x="385" y="25" fill="#170C79" fontSize="9" fontWeight="bold" fontFamily="JetBrains Mono" textAnchor="middle">
-                      CAR 2 (TRAILER COACH)
+                      CAR 2 (TRAILER) • {car2Load} PAX
                     </text>
                   </g>
 
@@ -378,19 +394,25 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     <path
                       d="M 520 65 L 700 65 Q 720 68 720 82 L 720 135 L 520 135 Z"
                       fill="#FFFFFF"
-                      stroke={activeCarriageTab === 'DMC2' ? '#56B6C6' : '#170C79'}
+                      stroke={activeCarriageTab === 'DMC2' ? statusStyle.stripe : '#170C79'}
                       strokeWidth={activeCarriageTab === 'DMC2' ? '3' : '2'}
                     />
 
                     {/* Aerodynamic Nose Wedge */}
                     <path
                       d="M 720 85 Q 734 105 722 135 Z"
-                      fill="#56B6C6"
+                      fill={statusStyle.stripe}
                     />
+
+                    {/* Dynamic Train ID Label on Rear Cab */}
+                    <rect x="696" y="88" width="22" height="12" rx="2" fill="#170C79" />
+                    <text x="707" y="97" fill="#EFE3CA" fontSize="8" fontWeight="bold" fontFamily="JetBrains Mono" textAnchor="middle">
+                      {activeTrain.id}
+                    </text>
 
                     {/* Metro Livery Stripe */}
                     <rect x="520" y="115" width="198" height="6" fill="#170C79" />
-                    <rect x="520" y="121" width="198" height="3" fill="#56B6C6" />
+                    <rect x="520" y="121" width="198" height="3" fill={statusStyle.stripe} />
 
                     {/* Windows & Doors */}
                     <rect x="526" y="80" width="20" height="24" rx="2" fill="url(#windowTint)" stroke="#170C79" strokeWidth="0.8" />
@@ -403,51 +425,119 @@ export const TrainDemonstration: React.FC<TrainDemonstrationProps> = ({
                     {/* Doors */}
                     <rect x="614" y="75" width="10" height="60" fill="#EFE3CA" stroke="#170C79" strokeWidth="0.8" />
 
-                    {/* Carriage Label */}
+                    {/* Carriage Label & Dynamic PAX load */}
                     <text x="620" y="55" fill="#170C79" fontSize="9" fontWeight="bold" fontFamily="JetBrains Mono" textAnchor="middle">
-                      CAR 3 (DMC-B)
+                      CAR 3 (DMC-B) • {car3Load} PAX
                     </text>
                   </g>
                 </svg>
               </div>
 
-              {/* Spatial Engineering Callout Annotation Boxes (Zero Overlap with Train) */}
+              {/* Dynamic Carriage Telemetry Readout Cards (Updates with Selected Tab & Train) */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 font-mono-tech text-xs">
-                <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
-                    <Radio className="w-3.5 h-3.5 text-[#56B6C6]" />
-                    <span>ALSTOM URBALIS 400</span>
-                  </div>
-                  <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
-                    Continuous CBTC bidirectional radio link with automated ATP/ATO speed profiling.
-                  </p>
-                </div>
+                {activeCarriageTab === 'DMC1' ? (
+                  <>
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Radio className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>LEAD CAB ATO/ATP LINK</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Continuous GoA2 CBTC speed enforcement: <span className="font-bold font-mono-tech text-[#170C79]">{activeTrain.speedKmh} km/h</span> target limit.
+                      </p>
+                    </div>
 
-                <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
-                    <Zap className="w-3.5 h-3.5 text-[#56B6C6]" />
-                    <span>750V DC THIRD RAIL</span>
-                  </div>
-                  <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
-                    Bottom-contact third rail pickup shoes with regenerative traction braking recovery.
-                  </p>
-                </div>
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Thermometer className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>INVERTER MOTOR 1</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Operating temperature: <span className={`font-bold font-mono-tech ${activeTrain.motorTempC > 70 ? 'text-[#C53030]' : 'text-[#170C79]'}`}>{activeTrain.motorTempC}°C</span> (Stator normal).
+                      </p>
+                    </div>
 
-                <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
-                    <Cpu className="w-3.5 h-3.5 text-[#56B6C6]" />
-                    <span>DYNAMIC SIDING DISPATCH</span>
-                  </div>
-                  <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
-                    AI-synchronized hot-reserve injection from Muttom Depot within 42ms solve latency.
-                  </p>
-                </div>
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Shield className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>BOGIE 1-2 HEALTH</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Axle vibration test score: <span className="font-bold font-mono-tech text-[#170C79]">{activeTrain.healthScorePct}%</span> nominal.
+                      </p>
+                    </div>
+                  </>
+                ) : activeCarriageTab === 'TC' ? (
+                  <>
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Zap className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>750V DC POWER DRAW</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Instantaneous third rail intake: <span className="font-bold font-mono-tech text-[#170C79]">{activeTrain.energyConsumptionKwh} kWh</span>.
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Activity className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>TRAILER SALOON OCCUPANCY</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Mid-coach weight balance: <span className="font-bold font-mono-tech text-[#170C79]">{car2Load} PAX</span> (Capacity 390).
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Cpu className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>HVAC CLIMATE CONTROL</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Saloon temperature regulated at <span className="font-bold font-mono-tech text-[#170C79]">21.5°C</span> (Airflow optimal).
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Radio className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>TRAIL CAB REVERSING LOCK</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Interlock state: <span className="font-bold font-mono-tech text-[#170C79]">{activeTrain.direction === 'DOWN' ? 'STANDBY TRAIL' : 'ACTIVE LEAD'}</span>.
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Zap className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>REGEN BRAKING MATRIX</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Regenerative energy recovery rate: <span className="font-bold font-mono-tech text-[#2E8B57]">28.6%</span> back to 750V DC grid.
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] shadow-2xs space-y-1">
+                      <div className="flex items-center gap-1.5 text-[#170C79] font-bold text-[10.5px]">
+                        <Thermometer className="w-3.5 h-3.5 text-[#56B6C6]" />
+                        <span>INVERTER MOTOR 2</span>
+                      </div>
+                      <p className="font-inter text-[11px] text-[#2C2B68] leading-relaxed">
+                        Operating temperature: <span className="font-bold font-mono-tech text-[#170C79]">{Math.max(38, activeTrain.motorTempC - 3)}°C</span>.
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
             {/* Bottom Live Telemetry Footnote */}
             <div className="pt-3 border-t border-[#8ACBD0]/40 flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono-tech text-[#2C2B68]">
-              <span>FORMATION: 3 CARS (66M LENGTH) • TARE WEIGHT: 104 TONNES</span>
+              <span>FORMATION: 3 CARS (66M LENGTH) • TARE WEIGHT: 104 TONNES • STATUS: {activeTrain.status}</span>
               <span className="font-bold text-[#170C79]">MAX ACCELERATION: 1.0 M/S² • SAFE BRAKING: 1.2 M/S²</span>
             </div>
           </div>

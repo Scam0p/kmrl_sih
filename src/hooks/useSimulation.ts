@@ -262,7 +262,7 @@ export function useSimulation() {
       time: now,
       type: 'DEPLOYMENT',
       title: `OPERATOR EXECUTED INDUCTION: ${rec.trainId}`,
-      detail: `Plan executed: ${rec.title}. Target: ${rec.targetStation}`,
+      detail: `Plan executed: ${rec.title}. Destination: ${rec.targetStation}. Expected wait reduction: ${rec.expectedWaitReduction}.`,
       trainId: rec.trainId
     };
     setEventLogs(prev => [newLog, ...prev.slice(0, 24)]);
@@ -273,6 +273,16 @@ export function useSimulation() {
     if (isOptimizing) return;
     setIsOptimizing(true);
     setOptimizationStep(1);
+
+    const nowStart = formatTime(simSeconds);
+    const startLog: AIEventLog = {
+      id: `LOG-OPT-START-${Date.now()}`,
+      time: nowStart,
+      type: 'OPTIMIZATION',
+      title: 'AI MULTI-OBJECTIVE SOLVER ENGAGED',
+      detail: 'Scanning 1,420 permutations across headway, depot stabling turnover, passenger queues and traction power.'
+    };
+    setEventLogs(prev => [startLog, ...prev.slice(0, 24)]);
 
     const steps = [
       { step: 1, delay: 500, title: 'SCANNING RAILWAY NETWORK & TRACK SENSORS...' },
@@ -320,8 +330,8 @@ export function useSimulation() {
         id: `LOG-OPT-${Date.now()}`,
         time: now,
         type: 'OPTIMIZATION',
-        title: 'GLOBAL OPTIMIZATION COMPLETE',
-        detail: 'Dynamic induction plan applied. Fleet utilization increased to 91%. Avg wait reduced to 5.2 min.'
+        title: 'PARETO OPTIMIZATION CONVERGED',
+        detail: 'Dynamic induction plan applied. Fleet utilization increased to 91%. Headway stabilized at 04:30 min.'
       };
       setEventLogs(prev => [optLog, ...prev.slice(0, 24)]);
     }, 3800);
@@ -335,8 +345,16 @@ export function useSimulation() {
     setStations(INITIAL_STATIONS);
     setKpis(CASE_KPIS.ai);
     setRecommendations(INITIAL_AI_RECOMMENDATIONS);
-    setEventLogs(INITIAL_AI_LOGS);
-    setSimSeconds(8 * 3600 + 42 * 60 + 15);
+    const now = '08:00:00';
+    const resetLog: AIEventLog = {
+      id: `LOG-RESET-${Date.now()}`,
+      time: now,
+      type: 'CONSTRAINT',
+      title: 'SIMULATION REINITIALIZED',
+      detail: 'Corridor clock reset to 08:00 morning peak start. Initial timetable restored.'
+    };
+    setEventLogs([resetLog, ...INITIAL_AI_LOGS]);
+    setSimSeconds(8 * 3600);
     setSelectedTrain(null);
     setSelectedStation(null);
     setIsPlaying(true);
