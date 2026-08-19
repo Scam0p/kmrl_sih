@@ -6,6 +6,7 @@ import { AccessRestrictedModal } from './components/auth/AccessRestrictedModal';
 import { TopStatusBar } from './components/layout/TopStatusBar';
 import { KMRLSlidingNav } from './components/layout/KMRLSlidingNav';
 import { FloatingOperationsDock } from './components/layout/FloatingOperationsDock';
+import { FloatingQuickActions } from './components/layout/FloatingQuickActions';
 import { PortalModal, PortalModalView } from './components/portal/PortalModal';
 import { HeroSection } from './components/hero/HeroSection';
 import { ControlCentre } from './components/dashboard/ControlCentre';
@@ -131,6 +132,12 @@ const MainDashboard: React.FC = () => {
         activeTrainsCount={activeTrainsCount}
         totalTrainsCount={trains.length}
         onOpenPortalModal={handleOpenPortalModal}
+      />
+
+      {/* 3b. Floating Bottom-Right Quick Action Buttons (Chatbot & Summary) */}
+      <FloatingQuickActions
+        onOpenAssistant={() => setIsAssistantOpen(true)}
+        onOpenSummary={() => setIsAnalyticsOpen(true)}
       />
 
       {/* 4. Main Viewport Container */}

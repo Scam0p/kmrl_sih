@@ -13,6 +13,7 @@ import {
   BarChart2, 
   History,
   HelpCircle,
+  BookOpen,
   Bot,
   Bell,
   User,
@@ -77,7 +78,7 @@ const NAVIGATION_GROUPS: NavCategory[] = [
     items: [
       { id: 'analytics', label: 'Analytics & Reports', subtitle: 'Energy, Wait Times & Punctuality', icon: BarChart2, isModal: true, modalView: 'analytics' },
       { id: 'decision-history', label: 'Decision History', subtitle: 'Audit Ledger of Inductions', icon: History, isModal: true, modalView: 'decision-history' },
-      { id: 'faqs', label: 'FAQ / SOPs', subtitle: 'Operating Procedures & Rules', icon: HelpCircle, isModal: true, modalView: 'faqs' },
+      { id: 'faqs', label: 'Standard Operating Procedures', subtitle: 'OCC Protocols, Turnouts & Safety SOPs', icon: BookOpen, isModal: true, modalView: 'faqs' },
       { id: 'ai-assistant', label: 'AI Assistant', subtitle: 'OCC Copilot Natural Language Link', icon: Bot, isModal: true, modalView: 'ai-assistant' }
     ]
   },

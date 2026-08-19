@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   Compass, 
   Radio, 
-  Train as TrainIcon, 
   Cpu, 
   AlertTriangle, 
-  Layers, 
   BarChart2, 
   Clock, 
-  Activity 
+  Train as TrainIcon 
 } from 'lucide-react';
 import { PortalModalView } from '../portal/PortalModal';
 
@@ -71,7 +69,6 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
       {/* Floating Live Clock & Fleet Data Segment */}
       <div className="flex items-center gap-2 pl-2 pr-3 py-1 border-r border-[#56B6C6]/40 text-xs">
         <div className="flex items-center gap-1.5 text-[#EFE3CA]">
-          <span className="w-2 h-2 rounded-full bg-[#56B6C6] animate-pulse"></span>
           <span className="font-bold text-xs tracking-wider text-[#EFE3CA] whitespace-nowrap">
             {simTime}
           </span>
@@ -84,7 +81,7 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
         </div>
       </div>
 
-      {/* Quick-Access Navigation Links */}
+      {/* Quick-Access Navigation Links (Network, AI Operations, Alerts, Analytics) */}
       <div className="flex items-center gap-1 text-xs">
         {/* 1. Dashboard */}
         <button
@@ -92,51 +89,37 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
             window.scrollTo({ top: 0, behavior: 'smooth' });
             setActiveSection('dashboard');
           }}
-          className={`px-2.5 py-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
+          className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
             activeSection === 'dashboard'
-              ? 'bg-[#D9A24B] text-[#170C79] shadow-sm scale-[1.02]'
+              ? 'bg-[#D9A24B] text-[#170C79] shadow-xs'
               : 'text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E]'
           }`}
           title="Overview Dashboard"
         >
           <Compass className="w-3.5 h-3.5" />
-          <span className="hidden lg:inline">Dashboard</span>
+          <span className="hidden sm:inline">Dashboard</span>
         </button>
 
-        {/* 2. Network */}
+        {/* 2. Live Network (Unified single entry for Network, Trains, and Fleet) */}
         <button
           onClick={() => scrollToElement('network-section', 'network')}
-          className={`px-2.5 py-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
+          className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
             activeSection === 'network'
-              ? 'bg-[#D9A24B] text-[#170C79] shadow-sm scale-[1.02]'
+              ? 'bg-[#D9A24B] text-[#170C79] shadow-xs'
               : 'text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E]'
           }`}
-          title="Live Network Corridor"
+          title="Live Network Corridor & Fleet Simulation"
         >
           <Radio className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Network</span>
+          <span className="hidden sm:inline">Live Network</span>
         </button>
 
-        {/* 3. Trains */}
-        <button
-          onClick={() => scrollToElement('network-section', 'trains')}
-          className={`px-2.5 py-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
-            activeSection === 'trains'
-              ? 'bg-[#D9A24B] text-[#170C79] shadow-sm scale-[1.02]'
-              : 'text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E]'
-          }`}
-          title="Rolling Stock Architecture"
-        >
-          <TrainIcon className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Trains</span>
-        </button>
-
-        {/* 4. AI Operations */}
+        {/* 3. AI Operations */}
         <button
           onClick={() => scrollToElement('ai-engine-section', 'ai-operations')}
-          className={`px-2.5 py-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
+          className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
             activeSection === 'ai-operations'
-              ? 'bg-[#D9A24B] text-[#170C79] shadow-sm scale-[1.02]'
+              ? 'bg-[#D9A24B] text-[#170C79] shadow-xs'
               : 'text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E]'
           }`}
           title="AI Dynamic Induction Engine"
@@ -145,34 +128,20 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
           <span className="hidden sm:inline">AI Operations</span>
         </button>
 
-        {/* 5. Alerts */}
+        {/* 4. Alerts */}
         <button
           onClick={() => onOpenPortalModal('alerts')}
-          className="px-2.5 py-1.5 rounded-xl text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E] transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+          className="px-3 py-1.5 rounded-xl text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold"
           title="Alerts & Incident Management"
         >
           <AlertTriangle className="w-3.5 h-3.5 text-[#D9A24B]" />
-          <span className="hidden lg:inline">Alerts</span>
+          <span className="hidden sm:inline">Alerts</span>
         </button>
 
-        {/* 6. Fleet */}
-        <button
-          onClick={() => scrollToElement('network-section', 'fleet')}
-          className={`px-2.5 py-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
-            activeSection === 'fleet'
-              ? 'bg-[#D9A24B] text-[#170C79] shadow-sm scale-[1.02]'
-              : 'text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E]'
-          }`}
-          title="Fleet Roster & Siding Readiness"
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span className="hidden lg:inline">Fleet</span>
-        </button>
-
-        {/* 7. Analytics */}
+        {/* 5. Analytics */}
         <button
           onClick={() => onOpenPortalModal('analytics')}
-          className="px-2.5 py-1.5 rounded-xl text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E] transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+          className="px-3 py-1.5 rounded-xl text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold"
           title="Performance Analytics & Reports"
         >
           <BarChart2 className="w-3.5 h-3.5 text-[#56B6C6]" />
