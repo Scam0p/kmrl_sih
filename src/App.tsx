@@ -13,6 +13,7 @@ import { TrainDetailDrawer } from './components/modals/TrainDetailDrawer';
 import { StationDetailDrawer } from './components/modals/StationDetailDrawer';
 import { AIOptimizationModal } from './components/modals/AIOptimizationModal';
 import { AIOperationsAssistant } from './components/assistant/AIOperationsAssistant';
+import { AnalyticsReportsConsole } from './components/analytics/AnalyticsReportsConsole';
 import { CommandFooter } from './components/footer/CommandFooter';
 import { CaseType, ScenarioType } from './types/simulation';
 
@@ -20,6 +21,7 @@ const MainDashboard: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [portalModalView, setPortalModalView] = useState<PortalModalView>(null);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const { checkPermission } = useAuth();
 
   const {
@@ -60,6 +62,10 @@ const MainDashboard: React.FC = () => {
   const handleOpenPortalModal = (view: PortalModalView) => {
     if (view === 'ai-assistant') {
       setIsAssistantOpen(true);
+      return;
+    }
+    if (view === 'analytics') {
+      setIsAnalyticsOpen(true);
       return;
     }
     setPortalModalView(view);
@@ -211,6 +217,17 @@ const MainDashboard: React.FC = () => {
           const el = document.getElementById('ai-engine-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+      />
+
+      {/* Dedicated Analytics & Reports Console */}
+      <AnalyticsReportsConsole
+        isOpen={isAnalyticsOpen}
+        onClose={() => setIsAnalyticsOpen(false)}
+        trains={trains}
+        stations={stations}
+        kpis={kpis}
+        currentCase={currentCase}
+        simTime={simTime}
       />
 
       {/* Role-Based Access Restricted Dialog */}
