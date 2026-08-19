@@ -7,11 +7,7 @@ import {
   RotateCcw, 
   Clock, 
   Sparkles, 
-  Layers, 
   Radio, 
-  Zap, 
-  Activity, 
-  ShieldCheck, 
   Info 
 } from 'lucide-react';
 
@@ -38,7 +34,6 @@ interface RailwayNetworkProps {
 export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
   trains,
   stations,
-  currentCase,
   onSelectTrain,
   onSelectStation,
   selectedTrain,
@@ -55,7 +50,8 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
 }) => {
   const [hoveredStation, setHoveredStation] = useState<Station | null>(null);
 
-  // Scaled coordinates on the expanded 1200x480 SVG map
+  // Scaled coordinates on the expanded 1200x520 SVG map
+  // Mainline Down Line is at Y=230, Up Line is at Y=350, Station centers at Y=290
   const stationCoords: Record<string, { x: number; y: number }> = {
     DEPOT: { x: 120, y: 95 },
     ALUVA: { x: 200, y: 290 },
@@ -72,158 +68,172 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
   const progressPct = Math.max(0, Math.min(100, ((simSeconds - startSeconds) / (endSeconds - startSeconds)) * 100));
 
   return (
-    <div className="w-full gov-panel-elevated rounded-2xl p-4 md:p-6 border border-white/10 shadow-2xl space-y-4">
-      {/* Top Header of the Unified Simulation Deck */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10">
+    <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm space-y-2">
+      {/* Top Window Bezel with Micro-Rivets & Master Deck Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-2 pb-2">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-[#0E1626] border border-white/10 text-[#38BDF8]">
-            <Radio className="w-5 h-5" />
+          {/* Bezel Micro-Rivets */}
+          <div className="flex items-center gap-1.5 mr-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+          </div>
+
+          <div className="p-2 rounded-lg bg-[#EFE3CA] border border-[#8ACBD0] text-[#170C79]">
+            <Radio className="w-4 h-4 text-[#56B6C6]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-display font-bold text-base md:text-xl text-white tracking-wide uppercase">
+              <h2 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79] tracking-wide uppercase">
                 KMRL MAINLINE & DEPOT OPERATIONS MAP
               </h2>
-              <span className="text-[10px] font-mono-tech px-2.5 py-0.5 rounded bg-white/5 text-white/80 border border-white/10 font-semibold">
+              <span className="text-[9px] font-mono-tech px-2 py-0.5 rounded bg-[#EFE3CA] text-[#170C79] border border-[#8ACBD0] font-bold">
                 LINE 1 • 25.6 KM
               </span>
             </div>
-            <p className="text-xs text-white/50 font-mono-tech">
+            <p className="font-inter text-xs text-[#2C2B68] font-medium">
               Interactive high-resolution corridor schematic • Real-time train positions & siding induction
             </p>
           </div>
         </div>
 
-        {/* Status Legend (Clean & Professional) */}
-        <div className="flex flex-wrap items-center gap-2 text-xs font-mono-tech text-white/70">
-          <div className="flex items-center gap-1.5 bg-[#080C14] px-2.5 py-1 rounded border border-white/10">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E]"></span>
-            <span>In Service</span>
+        {/* Status Legend (Color Hunt Palette) */}
+        <div className="flex flex-wrap items-center gap-2 text-xs font-mono-tech">
+          <div className="flex items-center gap-1.5 bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#8ACBD0]">
+            <span className="w-2 h-2 rounded-full bg-[#2E8B57]"></span>
+            <span className="text-[#170C79] font-bold text-[10px]">In Service</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#080C14] px-2.5 py-1 rounded border border-white/10">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#38BDF8]"></span>
-            <span>AI Inducting</span>
+          <div className="flex items-center gap-1.5 bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#8ACBD0]">
+            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[#170C79] font-bold text-[10px]">AI Inducting</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#080C14] px-2.5 py-1 rounded border border-white/10">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>
-            <span>Standby Depot</span>
+          <div className="flex items-center gap-1.5 bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#8ACBD0]">
+            <span className="w-2 h-2 rounded-full bg-[#170C79]"></span>
+            <span className="text-[#170C79] font-bold text-[10px]">Standby Depot</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#080C14] px-2.5 py-1 rounded border border-white/10">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></span>
-            <span>Maintenance</span>
+          <div className="flex items-center gap-1.5 bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#8ACBD0]">
+            <span className="w-2 h-2 rounded-full bg-[#C53030]"></span>
+            <span className="text-[#170C79] font-bold text-[10px]">Maintenance</span>
+          </div>
+
+          {/* Right Bezel Micro-Rivets */}
+          <div className="flex items-center gap-1.5 ml-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
           </div>
         </div>
       </div>
 
       {/* Main Expansive Layout: Big SVG Canvas + Integrated Side Controls Panel */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-stretch">
         {/* Dominant Large Railway Simulation Canvas (9 Cols) */}
-        <div className="xl:col-span-9 relative bg-[#05080E] rounded-xl border border-white/10 p-3 overflow-x-auto min-h-[480px] flex items-center">
+        <div className="xl:col-span-9 relative bg-[#EFE3CA] rounded-xl border border-[#8ACBD0] p-3 overflow-x-auto min-h-[500px] flex items-center shadow-inner">
           <div className="w-full min-w-[1040px] relative">
             <svg
-              viewBox="0 0 1200 480"
+              viewBox="0 0 1200 520"
               className="w-full h-auto select-none"
-              style={{ minHeight: '440px' }}
+              style={{ minHeight: '460px' }}
             >
               <defs>
-                {/* Subtle, Clean Track Gradients */}
+                {/* Clean Indigo & Cyan Track Gradients */}
                 <linearGradient id="mainlineStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0284C7" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#38BDF8" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#0284C7" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="#170C79" stopOpacity="0.9" />
+                  <stop offset="50%" stopColor="#56B6C6" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="#170C79" stopOpacity="0.9" />
                 </linearGradient>
 
                 <linearGradient id="depotSidingStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#E30613" stopOpacity="0.9" />
+                  <stop offset="0%" stopColor="#56B6C6" stopOpacity="0.95" />
+                  <stop offset="100%" stopColor="#170C79" stopOpacity="0.8" />
                 </linearGradient>
               </defs>
 
-              {/* Clean Background Grid */}
-              <g opacity="0.08">
+              {/* Clean Engineering Background Grid */}
+              <g opacity="0.18">
                 {Array.from({ length: 24 }).map((_, i) => (
                   <line
                     key={`vg-${i}`}
                     x1={i * 50}
                     y1="0"
                     x2={i * 50}
-                    y2="480"
-                    stroke="#FFFFFF"
-                    strokeWidth="0.5"
+                    y2="520"
+                    stroke="#8ACBD0"
+                    strokeWidth="0.75"
                   />
                 ))}
-                {Array.from({ length: 10 }).map((_, i) => (
+                {Array.from({ length: 11 }).map((_, i) => (
                   <line
                     key={`hg-${i}`}
                     x1="0"
                     y1={i * 50}
                     x2="1200"
                     y2={i * 50}
-                    stroke="#FFFFFF"
-                    strokeWidth="0.5"
+                    stroke="#8ACBD0"
+                    strokeWidth="0.75"
                   />
                 ))}
               </g>
 
               {/* MUTTOM MAINTENANCE DEPOT (Top-Left Facility Box) */}
-              <g transform="translate(30, 30)">
+              <g transform="translate(30, 25)">
                 <rect
                   x="0"
                   y="0"
-                  width="180"
-                  height="130"
+                  width="185"
+                  height="135"
                   rx="8"
-                  fill="#0E1626"
-                  stroke="#F59E0B"
+                  fill="#FFFFFF"
+                  stroke="#8ACBD0"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                 />
                 <text
                   x="14"
-                  y="24"
-                  fill="#F59E0B"
+                  y="22"
+                  fill="#170C79"
                   fontSize="11"
                   fontWeight="bold"
-                  fontFamily="Space Grotesk"
-                  letterSpacing="0.08em"
+                  fontFamily="JetBrains Mono"
+                  letterSpacing="0.06em"
                 >
                   MUTTOM DEPOT
                 </text>
                 <text
                   x="14"
-                  y="38"
-                  fill="rgba(255,255,255,0.4)"
-                  fontSize="8.5"
+                  y="36"
+                  fill="#2C2B68"
+                  fontSize="8"
                   fontFamily="JetBrains Mono"
                 >
                   ROLLING STOCK STABLING & INDUCTION
                 </text>
 
                 {/* Depot Stabling Siding Tracks */}
-                <line x1="18" y1="65" x2="162" y2="65" stroke="rgba(255,255,255,0.25)" strokeWidth="2.5" />
-                <text x="20" y="60" fill="rgba(255,255,255,0.3)" fontSize="7" fontFamily="JetBrains Mono">SIDING 1</text>
+                <line x1="18" y1="62" x2="168" y2="62" stroke="#8ACBD0" strokeWidth="2.5" />
+                <text x="20" y="56" fill="#2C2B68" fontSize="7" fontFamily="JetBrains Mono" fontWeight="bold">SIDING 1</text>
 
-                <line x1="18" y1="95" x2="162" y2="95" stroke="rgba(255,255,255,0.25)" strokeWidth="2.5" />
-                <text x="20" y="90" fill="rgba(255,255,255,0.3)" fontSize="7" fontFamily="JetBrains Mono">SIDING 2 (HOT RESERVE)</text>
+                <line x1="18" y1="95" x2="168" y2="95" stroke="#8ACBD0" strokeWidth="2.5" />
+                <text x="20" y="89" fill="#2C2B68" fontSize="7" fontFamily="JetBrains Mono" fontWeight="bold">SIDING 2 (HOT RESERVE)</text>
 
-                <line x1="18" y1="120" x2="162" y2="120" stroke="#E30613" strokeWidth="2" strokeDasharray="3 3" opacity="0.7" />
-                <text x="20" y="116" fill="#E30613" fontSize="7" fontFamily="JetBrains Mono">INDUCTION DISPATCH LINE</text>
+                <line x1="18" y1="125" x2="168" y2="125" stroke="#56B6C6" strokeWidth="2" strokeDasharray="3 3" />
+                <text x="20" y="119" fill="#56B6C6" fontSize="7" fontWeight="bold" fontFamily="JetBrains Mono">INDUCTION DISPATCH LINE</text>
               </g>
 
               {/* DEPOT-TO-MAINLINE TURNOUT FEEDER TRACK */}
               <g>
                 <path
-                  d="M 140 100 C 160 100, 180 190, 200 290"
+                  d="M 140 95 C 160 95, 180 160, 200 230"
                   stroke="url(#depotSidingStroke)"
                   strokeWidth="3"
                   fill="none"
                   strokeDasharray="5 3"
                 />
+                <rect x="155" y="150" width="80" height="16" rx="3" fill="#FFFFFF" stroke="#8ACBD0" strokeWidth="1" />
                 <text
-                  x="165"
-                  y="200"
-                  fill="#E30613"
-                  fontSize="8.5"
+                  x="195"
+                  y="161"
+                  textAnchor="middle"
+                  fill="#56B6C6"
+                  fontSize="7.5"
                   fontWeight="bold"
                   fontFamily="JetBrains Mono"
                 >
@@ -231,79 +241,100 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
                 </text>
               </g>
 
-              {/* MAINLINE DOUBLE TRACKS (DOWN & UP) */}
+              {/* MAINLINE DOUBLE TRACKS (DOWN AT Y=230 & UP AT Y=350) */}
               <g>
-                {/* Track Base Beds */}
+                {/* Down Line Track Base Bed */}
                 <line
                   x1="190"
-                  y1="272"
+                  y1="230"
                   x2="1130"
-                  y2="272"
-                  stroke="rgba(255,255,255,0.12)"
+                  y2="230"
+                  stroke="#8ACBD0"
                   strokeWidth="8"
                   strokeLinecap="round"
                 />
                 <line
                   x1="190"
-                  y1="272"
+                  y1="230"
                   x2="1130"
-                  y2="272"
+                  y2="230"
                   stroke="url(#mainlineStroke)"
                   strokeWidth="3"
                 />
 
-                <line
-                  x1="190"
-                  y1="308"
-                  x2="1130"
-                  y2="308"
-                  stroke="rgba(255,255,255,0.12)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="190"
-                  y1="308"
-                  x2="1130"
-                  y2="308"
-                  stroke="url(#mainlineStroke)"
-                  strokeWidth="3"
-                />
-
-                {/* Track Cross Sleepers */}
+                {/* Down Line Sleepers */}
                 {Array.from({ length: 48 }).map((_, i) => {
                   const tieX = 195 + i * 20;
                   return (
                     <line
-                      key={`tie-${i}`}
+                      key={`dtie-${i}`}
                       x1={tieX}
-                      y1="264"
+                      y1="222"
                       x2={tieX}
-                      y2="316"
-                      stroke="rgba(255,255,255,0.1)"
+                      y2="238"
+                      stroke="#170C79"
                       strokeWidth="1.5"
+                      opacity="0.35"
                     />
                   );
                 })}
 
-                {/* Direction Labels */}
+                {/* Up Line Track Base Bed */}
+                <line
+                  x1="190"
+                  y1="350"
+                  x2="1130"
+                  y2="350"
+                  stroke="#8ACBD0"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="190"
+                  y1="350"
+                  x2="1130"
+                  y2="350"
+                  stroke="url(#mainlineStroke)"
+                  strokeWidth="3"
+                />
+
+                {/* Up Line Sleepers */}
+                {Array.from({ length: 48 }).map((_, i) => {
+                  const tieX = 195 + i * 20;
+                  return (
+                    <line
+                      key={`utie-${i}`}
+                      x1={tieX}
+                      y1="342"
+                      x2={tieX}
+                      y2="358"
+                      stroke="#170C79"
+                      strokeWidth="1.5"
+                      opacity="0.35"
+                    />
+                  );
+                })}
+
+                {/* Direction Labels (Spacious Positioning) */}
                 <text
                   x="660"
-                  y="260"
-                  fill="rgba(56,189,248,0.7)"
+                  y="205"
+                  fill="#170C79"
                   fontSize="8.5"
+                  fontWeight="bold"
                   fontFamily="JetBrains Mono"
-                  letterSpacing="0.1em"
+                  letterSpacing="0.08em"
                 >
                   DOWN LINE → (SOUTHBOUND TO TRIPUNITHURA)
                 </text>
                 <text
                   x="660"
-                  y="326"
-                  fill="rgba(56,189,248,0.7)"
+                  y="380"
+                  fill="#170C79"
                   fontSize="8.5"
+                  fontWeight="bold"
                   fontFamily="JetBrains Mono"
-                  letterSpacing="0.1em"
+                  letterSpacing="0.08em"
                 >
                   ← UP LINE (NORTHBOUND TO ALUVA)
                 </text>
@@ -312,17 +343,19 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
               {/* EMERGENCY SIDING NEAR KALAMASSERY */}
               <g>
                 <path
-                  d="M 370 308 L 390 210 L 450 210"
-                  stroke="#EF4444"
+                  d="M 370 350 L 390 150 L 460 150"
+                  stroke="#C53030"
                   strokeWidth="2"
                   strokeDasharray="4 3"
                   fill="none"
                 />
+                <rect x="390" y="130" width="135" height="15" rx="3" fill="#FFFFFF" stroke="#C53030" strokeWidth="0.8" />
                 <text
-                  x="395"
-                  y="200"
-                  fill="#EF4444"
-                  fontSize="8"
+                  x="457"
+                  y="141"
+                  textAnchor="middle"
+                  fill="#C53030"
+                  fontSize="7"
                   fontWeight="bold"
                   fontFamily="JetBrains Mono"
                 >
@@ -330,7 +363,7 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
                 </text>
               </g>
 
-              {/* RENDER ALL STATIONS WITH CLEAR LABELS & LOAD BARS */}
+              {/* RENDER ALL STATIONS WITH NON-OVERLAPPING CLEAR LABELS & LOAD BARS */}
               {stations.filter(s => s.id !== 'DEPOT').map((station) => {
                 const coords = stationCoords[station.id];
                 const isSelected = selectedStation?.id === station.id;
@@ -345,12 +378,15 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
                     onMouseLeave={() => setHoveredStation(null)}
                     className="cursor-pointer select-none"
                   >
+                    {/* Connecting Vertical Track Crossline */}
+                    <line x1="0" y1="-60" x2="0" y2="60" stroke="#8ACBD0" strokeWidth="2" strokeDasharray="3 3" opacity="0.6" />
+
                     {/* Station Node Halo */}
                     <circle
                       cx="0"
                       cy="0"
-                      r={isSurge ? "24" : "18"}
-                      fill={isSurge ? "rgba(239,68,68,0.25)" : "rgba(56,189,248,0.15)"}
+                      r={isSurge ? "22" : "16"}
+                      fill={isSurge ? "rgba(197,48,48,0.2)" : "rgba(86,182,198,0.25)"}
                     />
 
                     {/* Station Pillar / Marker */}
@@ -358,84 +394,97 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
                       cx="0"
                       cy="0"
                       r={isSelected ? "11" : "8"}
-                      fill="#0E1626"
-                      stroke={isSelected ? '#38BDF8' : isSurge ? '#EF4444' : '#0284C7'}
+                      fill="#FFFFFF"
+                      stroke={isSelected ? '#56B6C6' : isSurge ? '#C53030' : '#170C79'}
                       strokeWidth={isSelected ? '3' : '2'}
                     />
                     <circle
                       cx="0"
                       cy="0"
                       r={isSelected ? "5" : "3.5"}
-                      fill={isSurge ? '#EF4444' : '#22C55E'}
+                      fill={isSurge ? '#C53030' : '#170C79'}
                     />
 
-                    {/* Station Name & Code (Top) */}
-                    <g transform="translate(0, -32)">
+                    {/* Station Name & Code (Top with Clean Pill Box — Zero Overlap with Down Line) */}
+                    <g transform="translate(0, -100)">
+                      <rect
+                        x="-52"
+                        y="-15"
+                        width="104"
+                        height="30"
+                        rx="5"
+                        fill="#FFFFFF"
+                        stroke="#8ACBD0"
+                        strokeWidth="1.2"
+                        className="shadow-2xs"
+                      />
                       <text
                         x="0"
-                        y="0"
+                        y="-2"
                         textAnchor="middle"
-                        fill="#FFFFFF"
-                        fontSize="11.5"
+                        fill="#170C79"
+                        fontSize="9.5"
                         fontWeight="bold"
-                        fontFamily="Space Grotesk"
-                        letterSpacing="0.04em"
+                        fontFamily="JetBrains Mono"
+                        letterSpacing="0.03em"
                       >
                         {station.name.toUpperCase()}
                       </text>
                       <text
                         x="0"
-                        y="12"
+                        y="9"
                         textAnchor="middle"
-                        fill="rgba(255,255,255,0.45)"
-                        fontSize="8"
+                        fill="#2C2B68"
+                        fontSize="7.5"
+                        fontWeight="bold"
                         fontFamily="JetBrains Mono"
                       >
                         KM {station.kmPosition.toFixed(1)} • {station.code}
                       </text>
                     </g>
 
-                    {/* Demand & Queue HUD Badge (Bottom) */}
-                    <g transform="translate(0, 48)">
+                    {/* Demand & Queue HUD Badge (Bottom — Zero Overlap with Up Line) */}
+                    <g transform="translate(0, 95)">
                       <rect
-                        x="-40"
-                        y="-13"
-                        width="80"
-                        height="26"
+                        x="-42"
+                        y="-14"
+                        width="84"
+                        height="28"
                         rx="4"
-                        fill="#0E1626"
-                        stroke={isSurge ? '#EF4444' : 'rgba(255,255,255,0.15)'}
+                        fill="#FFFFFF"
+                        stroke={isSurge ? '#C53030' : '#8ACBD0'}
                         strokeWidth={isSurge ? '1.5' : '1'}
                       />
                       
                       {/* Passenger Demand Bar */}
-                      <rect x="-34" y="-8" width="68" height="4.5" rx="1" fill="rgba(255,255,255,0.1)" />
+                      <rect x="-36" y="-9" width="72" height="4.5" rx="1" fill="#EFE3CA" />
                       <rect
-                        x="-34"
-                        y="-8"
-                        width={Math.max(4, (station.passengerDemandPct / 100) * 68)}
+                        x="-36"
+                        y="-9"
+                        width={Math.max(4, (station.passengerDemandPct / 100) * 72)}
                         height="4.5"
                         rx="1"
-                        fill={isSurge ? '#EF4444' : station.passengerDemandPct > 70 ? '#F59E0B' : '#22C55E'}
+                        fill={isSurge ? '#C53030' : '#56B6C6'}
                       />
 
                       {/* Waiting Count */}
                       <text
-                        x="-32"
+                        x="-34"
                         y="8"
-                        fill={isSurge ? '#EF4444' : '#38BDF8'}
-                        fontSize="8"
+                        fill={isSurge ? '#C53030' : '#170C79'}
+                        fontSize="7.5"
                         fontWeight="bold"
                         fontFamily="JetBrains Mono"
                       >
                         {station.waitingCount} PAX
                       </text>
                       <text
-                        x="32"
+                        x="34"
                         y="8"
                         textAnchor="end"
-                        fill="rgba(255,255,255,0.8)"
-                        fontSize="8"
+                        fill="#2C2B68"
+                        fontSize="7.5"
+                        fontWeight="bold"
                         fontFamily="JetBrains Mono"
                       >
                         {station.passengerDemandPct}%
@@ -459,14 +508,14 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
         </div>
 
         {/* Integrated Side Control & Telemetry Deck (3 Cols) */}
-        <div className="xl:col-span-3 gov-card rounded-xl p-4 border border-white/10 flex flex-col justify-between space-y-4">
+        <div className="xl:col-span-3 rounded-xl bg-[#EFE3CA] border border-[#8ACBD0] p-4 flex flex-col justify-between space-y-4 shadow-inner">
           <div>
-            <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10">
-              <span className="text-[10px] font-mono-tech uppercase tracking-wider text-white/50 font-bold">
+            <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-[#8ACBD0]">
+              <span className="text-[10px] font-mono-tech uppercase tracking-wider text-[#170C79] font-bold">
                 SIMULATION CONTROLS
               </span>
-              <div className="flex items-center gap-1.5 text-xs font-mono-tech text-[#38BDF8]">
-                <Clock className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 text-xs font-mono-tech text-[#170C79]">
+                <Clock className="w-3.5 h-3.5 text-[#56B6C6]" />
                 <span className="font-bold">{simTime}</span>
               </div>
             </div>
@@ -476,10 +525,10 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={onTogglePlay}
-                  className={`py-2.5 px-3 rounded-lg font-display font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 shadow-sm ${
+                  className={`py-2.5 px-3 rounded-lg font-mono-tech font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 shadow-sm ${
                     isPlaying
-                      ? 'bg-[#E30613] text-white hover:bg-[#FF1A2E]'
-                      : 'bg-[#22C55E] text-black hover:bg-[#4ADE80]'
+                      ? 'bg-[#170C79] text-[#EFE3CA] hover:bg-[#56B6C6] hover:text-[#170C79]'
+                      : 'bg-[#56B6C6] text-[#170C79] hover:bg-[#48A1B0]'
                   }`}
                 >
                   {isPlaying ? (
@@ -497,7 +546,7 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
 
                 <button
                   onClick={onReset}
-                  className="py-2.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 font-mono-tech text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-lg bg-[#FFFFFF] hover:bg-[#8ACBD0] border border-[#8ACBD0] text-[#170C79] font-mono-tech text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>RESET</span>
@@ -506,18 +555,18 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
 
               {/* Speed Multipliers */}
               <div className="space-y-1">
-                <span className="text-[9px] font-mono-tech text-white/40 uppercase block">
+                <span className="text-[9px] font-mono-tech text-[#2C2B68] uppercase block font-bold">
                   PLAYBACK SPEED
                 </span>
-                <div className="grid grid-cols-4 gap-1.5 bg-[#05080E] p-1 rounded-lg border border-white/10 font-mono-tech text-xs">
+                <div className="grid grid-cols-4 gap-1.5 bg-[#FFFFFF] p-1 rounded-lg border border-[#8ACBD0] font-mono-tech text-xs shadow-xs">
                   {[0.5, 1, 2, 4].map((spd) => (
                     <button
                       key={spd}
                       onClick={() => onSetSpeed(spd)}
                       className={`py-1 rounded transition-colors cursor-pointer text-center ${
                         simSpeed === spd
-                          ? 'bg-[#0284C7] text-white font-bold'
-                          : 'text-white/50 hover:text-white hover:bg-white/5'
+                          ? 'bg-[#56B6C6] text-[#170C79] font-bold shadow-xs'
+                          : 'text-[#2C2B68] hover:text-[#170C79] hover:bg-[#8ACBD0]/40'
                       }`}
                     >
                       {spd}×
@@ -527,15 +576,15 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
               </div>
 
               {/* Time Scrubber Slider */}
-              <div className="space-y-1.5 pt-2 border-t border-white/10">
-                <div className="flex justify-between text-[10px] font-mono-tech text-white/60">
+              <div className="space-y-1.5 pt-2 border-t border-[#8ACBD0]/40">
+                <div className="flex justify-between text-[10px] font-mono-tech text-[#2C2B68] font-bold">
                   <span>08:00 (START)</span>
-                  <span className="text-[#38BDF8] font-bold">{progressPct.toFixed(0)}% ELAPSED</span>
+                  <span className="text-[#170C79] font-bold">{progressPct.toFixed(0)}% ELAPSED</span>
                   <span>09:30 (END)</span>
                 </div>
-                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-[#8ACBD0] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#0284C7] rounded-full transition-all duration-300"
+                    className="h-full bg-[#56B6C6] rounded-full transition-all duration-300"
                     style={{ width: `${progressPct}%` }}
                   ></div>
                 </div>
@@ -543,35 +592,35 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
             </div>
 
             {/* Quick Live Telemetry Readout */}
-            <div className="mt-4 pt-3 border-t border-white/10 space-y-2 text-xs font-mono-tech">
-              <span className="text-[9px] font-bold text-white/40 uppercase block">
+            <div className="mt-4 pt-3 border-t border-[#8ACBD0]/40 space-y-2 text-xs font-mono-tech">
+              <span className="text-[9px] font-bold text-[#170C79] uppercase block">
                 CORRIDOR TELEMETRY
               </span>
-              <div className="flex justify-between p-2 rounded bg-white/5">
-                <span className="text-white/50">ACTIVE FLEET:</span>
-                <span className="text-[#22C55E] font-bold">
+              <div className="flex justify-between p-2 rounded bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs">
+                <span className="text-[#2C2B68] font-bold">ACTIVE FLEET:</span>
+                <span className="text-[#170C79] font-bold">
                   {trains.filter(t => t.status === 'IN_SERVICE' || t.status === 'INDUCTING').length}/{trains.length} Units
                 </span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-white/5">
-                <span className="text-white/50">TARGET HEADWAY:</span>
-                <span className="text-[#38BDF8] font-bold">04:30 MIN</span>
+              <div className="flex justify-between p-2 rounded bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs">
+                <span className="text-[#2C2B68] font-bold">TARGET HEADWAY:</span>
+                <span className="text-[#170C79] font-bold">04:30 MIN</span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-white/5">
-                <span className="text-white/50">POWER GRID:</span>
-                <span className="text-white font-bold">750V DC (OK)</span>
+              <div className="flex justify-between p-2 rounded bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs">
+                <span className="text-[#2C2B68] font-bold">POWER GRID:</span>
+                <span className="text-[#170C79] font-bold">750V DC (OK)</span>
               </div>
             </div>
           </div>
 
           {/* Quick AI Optimize Action Button */}
-          <div className="pt-3 border-t border-white/10">
+          <div className="pt-3 border-t border-[#8ACBD0]/40">
             <button
               onClick={onRunOptimization}
               disabled={isOptimizing}
-              className="w-full py-2.5 px-3 rounded-lg bg-[#E30613] hover:bg-[#FF1A2E] text-white font-display font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2 shadow disabled:opacity-50"
+              className="w-full py-2.5 px-3 rounded-lg bg-[#170C79] hover:bg-[#56B6C6] hover:text-[#170C79] text-[#EFE3CA] font-mono-tech font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
             >
-              <Sparkles className={`w-3.5 h-3.5 ${isOptimizing ? 'animate-spin' : ''}`} />
+              <Sparkles className={`w-3.5 h-3.5 text-[#56B6C6] ${isOptimizing ? 'animate-spin' : ''}`} />
               <span>{isOptimizing ? 'SOLVING...' : 'TRIGGER AI OPTIMIZE'}</span>
             </button>
           </div>
@@ -580,36 +629,36 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
 
       {/* Hover Station Inspector Tooltip */}
       {hoveredStation && (
-        <div className="absolute top-20 right-8 bg-[#0E1626] border border-white/20 rounded-xl p-4 shadow-2xl z-30 min-w-[240px] pointer-events-none text-xs font-mono-tech">
-          <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-2">
-            <span className="font-bold text-white uppercase text-sm font-display">
+        <div className="absolute top-20 right-8 bg-[#FFFFFF] border-2 border-[#8ACBD0] rounded-xl p-4 shadow-xl z-30 min-w-[240px] pointer-events-none text-xs font-mono-tech">
+          <div className="flex items-center justify-between border-b border-[#8ACBD0]/40 pb-1.5 mb-2">
+            <span className="font-bold text-[#170C79] uppercase text-sm font-mono-tech">
               {hoveredStation.name}
             </span>
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
               hoveredStation.status === 'SURGE_CRITICAL' 
-                ? 'bg-[#EF4444]/20 text-[#EF4444] border border-[#EF4444]/40' 
-                : 'bg-[#22C55E]/20 text-[#22C55E] border border-[#22C55E]/40'
+                ? 'bg-[#C53030]/15 text-[#C53030] border-[#C53030]/30' 
+                : 'bg-[#8ACBD0]/30 text-[#170C79] border-[#8ACBD0]'
             }`}>
               {hoveredStation.status}
             </span>
           </div>
 
-          <div className="space-y-1.5 text-white/80">
+          <div className="space-y-1.5 text-[#170C79]">
             <div className="flex justify-between">
-              <span className="text-white/40">DEMAND LOAD:</span>
-              <span className="text-[#38BDF8] font-bold">{hoveredStation.passengerDemandPct}%</span>
+              <span className="text-[#2C2B68] font-bold">DEMAND LOAD:</span>
+              <span className="text-[#170C79] font-bold">{hoveredStation.passengerDemandPct}%</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/40">WAITING QUEUE:</span>
-              <span className="text-white font-bold">{hoveredStation.waitingCount} commuters</span>
+              <span className="text-[#2C2B68] font-bold">WAITING QUEUE:</span>
+              <span className="text-[#170C79] font-bold">{hoveredStation.waitingCount} commuters</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-white/40">INFLOW RATE:</span>
-              <span className="text-[#F59E0B] font-bold">+{hoveredStation.inflowRatePerMin} pax/min</span>
+              <span className="text-[#2C2B68] font-bold">INFLOW RATE:</span>
+              <span className="text-[#56B6C6] font-bold">+{hoveredStation.inflowRatePerMin} pax/min</span>
             </div>
           </div>
-          <div className="mt-2 pt-1.5 border-t border-white/10 text-[9px] text-[#38BDF8] flex items-center gap-1">
-            <Info className="w-3 h-3" />
+          <div className="mt-2 pt-1.5 border-t border-[#8ACBD0]/40 text-[9px] text-[#2C2B68] flex items-center gap-1">
+            <Info className="w-3 h-3 text-[#56B6C6]" />
             <span>Click node to view full platform CCTV telemetry</span>
           </div>
         </div>
@@ -617,3 +666,6 @@ export const RailwayNetwork: React.FC<RailwayNetworkProps> = ({
     </div>
   );
 };
+
+
+

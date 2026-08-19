@@ -10,17 +10,15 @@ export const DecisionFeed: React.FC<DecisionFeedProps> = ({ logs }) => {
   const getBadgeStyle = (type: AIEventLog['type']) => {
     switch (type) {
       case 'ANOMALY':
-        return 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40';
       case 'WARNING':
-        return 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/40';
+        return 'bg-[#C53030]/15 text-[#C53030] border-[#C53030]/40 font-bold';
       case 'DEPLOYMENT':
-        return 'bg-[#22C55E]/20 text-[#22C55E] border-[#22C55E]/40';
       case 'OPTIMIZATION':
-        return 'bg-[#38BDF8]/20 text-[#38BDF8] border-[#38BDF8]/40';
+        return 'bg-[#56B6C6]/25 text-[#170C79] border-[#56B6C6]/50 font-bold';
       case 'CONSTRAINT':
-        return 'bg-purple-500/20 text-purple-300 border-purple-500/40';
+        return 'bg-[#8ACBD0]/30 text-[#170C79] border-[#8ACBD0] font-bold';
       default:
-        return 'bg-white/10 text-white/70 border-white/20';
+        return 'bg-[#EFE3CA] text-[#2C2B68] border-[#8ACBD0] font-bold';
     }
   };
 
@@ -41,62 +39,77 @@ export const DecisionFeed: React.FC<DecisionFeedProps> = ({ logs }) => {
   };
 
   return (
-    <div className="gov-panel rounded-2xl p-5 md:p-6 border border-white/10 shadow-xl flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-[#0E1626] border border-white/10 text-[#38BDF8]">
-            <Terminal className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="font-display font-bold text-sm md:text-base text-white uppercase tracking-wide">
-              EVENT & TELEMETRY STREAM
-            </h3>
-            <span className="text-[9px] font-mono-tech text-white/40">
-              REAL-TIME AUDIT LOG
-            </span>
-          </div>
+    <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm flex flex-col h-full space-y-2">
+      {/* Top Bezel with Micro-Rivets & Stream Title */}
+      <div className="flex items-center justify-between px-3 pt-2 pb-1">
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[9px] font-mono-tech text-[#22C55E] bg-[#080C14] px-2.5 py-1 rounded border border-white/10 font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]"></span>
-          <span>LIVE STREAM</span>
+        <div className="flex items-center gap-2">
+          <Terminal className="w-4 h-4 text-[#56B6C6]" />
+          <h3 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79] uppercase tracking-wide">
+            EVENT & TELEMETRY STREAM
+          </h3>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
         </div>
       </div>
 
-      {/* Stream List */}
-      <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[380px] pr-1 font-mono-tech text-xs">
-        {logs.map((log) => {
-          const Icon = getIcon(log.type);
-          const badgeClass = getBadgeStyle(log.type);
+      {/* Inner Inset Viewport Pane */}
+      <div className="bg-[#EFE3CA] rounded-xl p-4 md:p-5 border border-[#8ACBD0] flex flex-col justify-between flex-1 shadow-inner">
+        {/* Stream Status Sub-header */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#8ACBD0]">
+          <span className="text-[10px] font-mono-tech text-[#2C2B68] font-bold">
+            REAL-TIME AUDIT LOG
+          </span>
+          <div className="flex items-center gap-1.5 text-[9.5px] font-mono-tech text-[#170C79] bg-[#FFFFFF] px-2.5 py-0.5 rounded border border-[#8ACBD0] font-bold shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#56B6C6] animate-pulse"></span>
+            <span>LIVE STREAM</span>
+          </div>
+        </div>
 
-          return (
-            <div
-              key={log.id}
-              className="p-3 rounded-xl bg-[#080C14] border border-white/5 hover:border-white/15 transition-colors"
-            >
-              <div className="flex items-center justify-between gap-2 mb-1">
-                <div className="flex items-center gap-1.5">
-                  <Icon className="w-3.5 h-3.5 text-white/40" />
-                  <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${badgeClass}`}>
-                    {log.type}
-                  </span>
-                  <span className="font-bold text-white text-[11px] truncate">
-                    {log.title}
+        {/* Stream List */}
+        <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[380px] pr-1 font-mono-tech text-xs">
+          {logs.map((log) => {
+            const Icon = getIcon(log.type);
+            const badgeClass = getBadgeStyle(log.type);
+
+            return (
+              <div
+                key={log.id}
+                className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0] hover:border-[#56B6C6] transition-colors shadow-xs"
+              >
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center gap-1.5">
+                    <Icon className="w-3.5 h-3.5 text-[#2C2B68]" />
+                    <span className={`text-[8px] font-mono-tech font-bold px-1.5 py-0.5 rounded border ${badgeClass}`}>
+                      {log.type}
+                    </span>
+                    <span className="font-mono-tech font-bold text-[#170C79] text-[11px] truncate">
+                      {log.title}
+                    </span>
+                  </div>
+                  <span className="text-[9px] font-mono-tech text-[#2C2B68] whitespace-nowrap">
+                    {log.time}
                   </span>
                 </div>
-                <span className="text-[9px] text-white/40 whitespace-nowrap">
-                  {log.time}
-                </span>
-              </div>
 
-              <p className="text-[10px] text-white/65 font-normal leading-relaxed pl-4 border-l border-white/10 mt-1">
-                {log.detail}
-              </p>
-            </div>
-          );
-        })}
+                <p className="font-inter text-xs text-[#2C2B68] font-medium leading-relaxed pl-3 border-l-2 border-[#8ACBD0] mt-1.5">
+                  {log.detail}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 };
+
+
+

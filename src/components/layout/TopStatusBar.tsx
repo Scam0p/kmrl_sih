@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, RefreshCw, Cpu, ShieldAlert, Sparkles } from 'lucide-react';
+import { Menu, Activity, RotateCcw, Cpu, ShieldAlert, Clock } from 'lucide-react';
 import { CaseType } from '../../types/simulation';
 
 interface TopStatusBarProps {
@@ -10,6 +10,7 @@ interface TopStatusBarProps {
   onReset: () => void;
   onRunOptimization: () => void;
   isOptimizing: boolean;
+  onToggleMenu: () => void;
 }
 
 export const TopStatusBar: React.FC<TopStatusBarProps> = ({
@@ -18,92 +19,97 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({
   activeTrainsCount,
   totalTrainsCount,
   onReset,
-  onRunOptimization,
-  isOptimizing
+  onToggleMenu
 }) => {
   return (
-    <header className="sticky top-0 z-40 bg-[#080C14]/95 backdrop-blur-md border-b border-white/10 px-4 md:px-8 py-3 flex items-center justify-between text-xs font-mono-tech select-none">
-      {/* Left: Authority & System Brand */}
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-40 w-full bg-[#170C79] border-b-2 border-[#56B6C6]/40 px-4 md:px-8 py-3 flex items-center justify-between text-xs font-mono-tech select-none shadow-lg text-[#EFE3CA]">
+      {/* Left: Menu Trigger + KMRL Brand Identity */}
+      <div className="flex items-center gap-3 sm:gap-4">
+        {/* Sliding Menu Trigger Button */}
+        <button
+          onClick={onToggleMenu}
+          className="px-3 py-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-all duration-200 cursor-pointer flex items-center gap-2 font-bold shadow-xs active:scale-95"
+          title="Open KMRL Operations Navigation Menu"
+          aria-label="Open Operations Menu"
+        >
+          <Menu className="w-4 h-4 text-[#56B6C6] group-hover:text-[#170C79]" />
+          <span className="hidden sm:inline text-xs tracking-wider">MENU</span>
+        </button>
+
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 bg-black flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#56B6C6]/50 bg-[#22158E] flex-shrink-0 shadow-xs">
             <img
               src="/logo.png"
-              alt="Powerhouse"
+              alt="KMRL Logo"
               className="w-full h-full object-cover"
             />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-display font-black tracking-wider text-sm md:text-base text-white">
-                KMRL <span className="text-[#38BDF8] font-normal">| AI OPERATIONS CENTRE</span>
+              <span className="font-mono-tech font-bold text-sm md:text-base text-[#EFE3CA] tracking-wide">
+                KMRL <span className="text-[#56B6C6] font-normal">| OPERATIONS CONTROL CENTRE</span>
               </span>
-              <span className="hidden sm:inline-block text-[9px] font-mono-tech px-2 py-0.5 rounded bg-[#E30613] text-white font-bold">
+              <span className="hidden sm:inline-block text-[9px] font-mono-tech px-2 py-0.5 rounded bg-[#56B6C6] text-[#170C79] font-bold">
                 SIH 2026
               </span>
             </div>
-            <span className="text-[10px] text-white/50 hidden md:block">
-              AI-Driven Train Induction Planning & Scheduling Simulation Suite
+            <span className="font-inter text-[10.5px] text-[#EFE3CA]/80 font-medium hidden md:block">
+              AI-Driven Train Induction Planning & Dynamic Dispatch Platform
             </span>
           </div>
         </div>
-
-        {/* Operational Case Indicator (Clean Pill) */}
-        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded bg-[#0E1626] border border-white/10 text-[11px] uppercase font-bold tracking-wider">
-          <span className="text-white/40">MODE:</span>
-          {currentCase === 'ai' ? (
-            <span className="text-[#22C55E] flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-[#22C55E]" /> AI DYNAMIC INDUCTION
-            </span>
-          ) : currentCase === 'conventional' ? (
-            <span className="text-[#38BDF8] flex items-center gap-1.5">
-              <Activity className="w-3.5 h-3.5" /> CONVENTIONAL CBTC
-            </span>
-          ) : (
-            <span className="text-[#F59E0B] flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5" /> MANUAL DISPATCH
-            </span>
-          )}
-        </div>
       </div>
 
-      {/* Right: In-Page Section Jump Navigation & Telemetry */}
-      <div className="flex items-center gap-3 md:gap-5">
-        {/* Navigation Links */}
-        <nav className="hidden xl:flex items-center gap-4 text-xs font-mono-tech text-white/60 mr-2">
-          <a href="#control-deck" className="hover:text-white transition-colors">01. CONSOLE</a>
-          <a href="#ai-engine-section" className="hover:text-white transition-colors">02. AI DECISION</a>
-          <a href="#fleet-section" className="hover:text-white transition-colors">03. FLEET</a>
-          <a href="#scenarios-section" className="hover:text-white transition-colors">04. SCENARIOS</a>
-          <a href="#comparison-section" className="hover:text-white transition-colors">05. BENCHMARK</a>
-        </nav>
+      {/* Center: Operational Mode Pill */}
+      <div className="hidden lg:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#22158E] border border-[#56B6C6]/40 text-xs font-mono-tech shadow-xs">
+        <span className="text-[#EFE3CA]/70 font-bold text-[10px]">PARADIGM:</span>
+        {currentCase === 'ai' ? (
+          <span className="text-[#56B6C6] flex items-center gap-1.5 font-bold">
+            <Cpu className="w-3.5 h-3.5 text-[#56B6C6]" /> 03. AI DYNAMIC INDUCTION
+          </span>
+        ) : currentCase === 'conventional' ? (
+          <span className="text-[#8ACBD0] flex items-center gap-1.5 font-bold">
+            <Activity className="w-3.5 h-3.5 text-[#8ACBD0]" /> 02. CONVENTIONAL CBTC
+          </span>
+        ) : (
+          <span className="text-[#EFE3CA] flex items-center gap-1.5 font-bold">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#EFE3CA]" /> 01. MANUAL DISPATCH
+          </span>
+        )}
+      </div>
 
-        {/* Fleet Count */}
-        <div className="hidden sm:flex items-center gap-1.5 bg-[#0E1626] border border-white/10 px-3 py-1 rounded text-xs">
-          <span className="text-white/40">FLEET:</span>
-          <span className="text-[#22C55E] font-bold">{activeTrainsCount}/{totalTrainsCount}</span>
-          <span className="text-[10px] text-white/60">ACTIVE</span>
+      {/* Right: Clean Telemetry & Reset Action */}
+      <div className="flex items-center gap-3 md:gap-4">
+        {/* Active Fleet Indicator */}
+        <div className="hidden sm:flex items-center gap-1.5 bg-[#22158E] border border-[#56B6C6]/40 px-3 py-1.5 rounded-lg text-xs font-mono-tech shadow-xs">
+          <span className="text-[#EFE3CA]/70 font-bold text-[10px]">FLEET:</span>
+          <span className="text-[#56B6C6] font-bold">{activeTrainsCount}/{totalTrainsCount} Units</span>
         </div>
 
-        {/* Live Simulation Clock */}
-        <div className="flex items-center gap-2 bg-[#0E1626] border border-white/15 px-3 py-1 rounded">
-          <span className="w-2 h-2 rounded-full bg-[#22C55E]"></span>
-          <span className="text-white font-bold text-xs md:text-sm tracking-wider">
+        {/* Live Clock */}
+        <div className="flex items-center gap-2 bg-[#22158E] border border-[#56B6C6]/40 px-3 py-1.5 rounded-lg shadow-xs">
+          <span className="w-2 h-2 rounded-full bg-[#56B6C6] animate-pulse"></span>
+          <span className="text-[#EFE3CA] font-bold text-xs md:text-sm tracking-wider font-mono-tech">
             {simTime}
           </span>
-          <span className="text-[9px] text-white/40">IST</span>
+          <span className="text-[9px] text-[#8ACBD0] font-bold">IST</span>
         </div>
 
-        {/* Reset Button */}
+        {/* Reset Simulation Button */}
         <button
           onClick={onReset}
-          className="p-1.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
-          title="Reset Simulation to Initial State"
+          className="p-1.5 rounded-lg bg-[#22158E] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-colors cursor-pointer shadow-xs flex items-center gap-1"
+          title="Reset Simulation to 08:00 Initial State"
           aria-label="Reset simulation"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span className="hidden xl:inline text-[10px] font-bold">RESET</span>
         </button>
       </div>
     </header>
   );
 };
+
+
+
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScenarioType, ScenarioDefinition } from '../../types/simulation';
+import { ScenarioType } from '../../types/simulation';
 import { SCENARIOS } from '../../data/mockData';
 import { Activity, TrendingUp, AlertTriangle, Users, Wrench, Zap, Play, CheckCircle2 } from 'lucide-react';
 
@@ -24,24 +24,27 @@ export const ScenarioControlCenter: React.FC<ScenarioControlCenterProps> = ({
   };
 
   return (
-    <div className="gov-panel rounded-2xl p-5 md:p-6 border border-white/10 shadow-xl">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-3 border-b border-white/10">
+    <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm space-y-2">
+      {/* Top Window Bezel with Micro-Rivets & Master Scenario Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-2 pb-2">
         <div>
-          <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#38BDF8] font-bold block">
-            STRESS-TEST CONTINGENCY MATRIX
-          </span>
-          <h2 className="font-display font-bold text-lg md:text-xl text-white tracking-wide uppercase">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+              STRESS-TEST CONTINGENCY MATRIX
+            </span>
+          </div>
+          <h2 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79] uppercase tracking-wide">
             OPERATIONAL SCENARIOS SIMULATOR
           </h2>
         </div>
-        <div className="text-xs font-mono-tech text-white/50 bg-[#080C14] px-3 py-1 rounded border border-white/10">
+        <div className="text-xs font-mono-tech text-[#170C79] bg-[#EFE3CA] px-3 py-1 rounded border border-[#8ACBD0] font-bold">
           INJECT REAL-TIME ANOMALIES TO DEMONSTRATE AI ADAPTIVE SCHEDULING
         </div>
       </div>
 
-      {/* Scenario Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* 6 Scenario Train Window Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 p-1">
         {SCENARIOS.map((scenario) => {
           const isActive = activeScenario === scenario.id;
           const Icon = getIcon(scenario.iconName);
@@ -50,57 +53,74 @@ export const ScenarioControlCenter: React.FC<ScenarioControlCenterProps> = ({
             <button
               key={scenario.id}
               onClick={() => onSelectScenario(scenario.id)}
-              className={`p-5 rounded-xl text-left transition-all duration-200 relative cursor-pointer flex flex-col justify-between ${
+              className={`rounded-2xl p-1.5 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between select-none ${
                 isActive
-                  ? 'bg-[#131E33] border-2 border-[#E30613] shadow-md scale-[1.01]'
-                  : 'bg-[#0B111E] hover:bg-[#0E1626] border border-white/10 hover:border-white/20'
+                  ? 'bg-[#8ACBD0] border-2 border-[#56B6C6] shadow-md scale-[1.01]'
+                  : 'bg-[#8ACBD0] border-2 border-[#8ACBD0] hover:border-[#56B6C6] shadow-sm'
               }`}
             >
-              {/* Active Badge */}
-              {isActive && (
-                <div className="absolute -top-3 right-4 bg-[#E30613] text-white font-mono-tech font-bold text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded shadow flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> ACTIVE SCENARIO
+              {/* Window Top Bezel with Micro-Rivets */}
+              <div className="flex items-center justify-between px-2 pt-1 pb-1.5">
+                <div className="flex items-center gap-1">
+                  <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-[#170C79]' : 'bg-[#170C79]/30'}`}></span>
+                  <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-[#170C79]' : 'bg-[#170C79]/30'}`}></span>
                 </div>
-              )}
+                {isActive ? (
+                  <span className="bg-[#56B6C6] text-[#170C79] font-mono-tech font-bold text-[8.5px] uppercase tracking-wider px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+                    <CheckCircle2 className="w-2.5 h-2.5" /> ACTIVE SCENARIO
+                  </span>
+                ) : (
+                  <span className="text-[8.5px] font-mono-tech uppercase tracking-wider text-[#170C79] font-bold">
+                    CONTINGENCY SLOT
+                  </span>
+                )}
+                <div className="flex items-center gap-1">
+                  <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-[#170C79]' : 'bg-[#170C79]/30'}`}></span>
+                  <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-[#170C79]' : 'bg-[#170C79]/30'}`}></span>
+                </div>
+              </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <div className={`p-2 rounded-lg ${isActive ? 'bg-[#E30613]/20 text-[#EF4444]' : 'bg-white/5 text-white/50'}`}>
-                    <Icon className="w-4 h-4" />
+              {/* Inner Inset Viewport Pane */}
+              <div className="bg-[#EFE3CA] rounded-xl p-3.5 border border-[#8ACBD0] flex flex-col justify-between flex-1 space-y-3 shadow-inner">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className={`p-2 rounded-lg border ${isActive ? 'bg-[#56B6C6] border-[#56B6C6] text-[#170C79]' : 'bg-[#FFFFFF] border-[#8ACBD0] text-[#2C2B68]'}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className={`text-[8px] font-mono-tech font-bold px-2 py-0.5 rounded border uppercase ${
+                      scenario.badge === 'CRITICAL EVENT' ? 'bg-[#C53030]/15 text-[#C53030] border-[#C53030]/30' :
+                      scenario.badge === 'HIGH DEMAND' ? 'bg-[#56B6C6]/25 text-[#170C79] border-[#56B6C6]/40' :
+                      'bg-[#FFFFFF] text-[#2C2B68] border-[#8ACBD0]'
+                    }`}>
+                      {scenario.badge}
+                    </span>
                   </div>
-                  <span className={`text-[8px] font-mono-tech font-bold px-2 py-0.5 rounded border uppercase ${
-                    scenario.badge === 'CRITICAL EVENT' ? 'bg-[#EF4444]/20 text-[#EF4444] border-[#EF4444]/40' :
-                    scenario.badge === 'HIGH DEMAND' ? 'bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40' :
-                    'bg-white/10 text-white/60 border-white/20'
-                  }`}>
-                    {scenario.badge}
+
+                  <h3 className="font-mono-tech font-bold text-xs md:text-sm text-[#170C79] uppercase tracking-tight mb-1.5">
+                    {scenario.title}
+                  </h3>
+
+                  <p className="font-inter text-xs text-[#2C2B68] font-medium leading-relaxed mb-2">
+                    {scenario.description}
+                  </p>
+                </div>
+
+                {/* Expected AI Reaction Box */}
+                <div className="pt-2 border-t border-[#8ACBD0]/40 text-[10.5px] bg-[#FFFFFF] p-2.5 rounded-lg border border-[#8ACBD0] space-y-1 shadow-xs">
+                  <span className="text-[#170C79] font-mono-tech font-bold block text-[9.5px]">
+                    AI ADAPTIVE REACTION:
+                  </span>
+                  <span className="font-inter text-xs text-[#2C2B68] font-medium leading-relaxed block">
+                    {scenario.expectedAIAction}
                   </span>
                 </div>
 
-                <h3 className="font-display font-bold text-sm md:text-base text-white uppercase tracking-tight mb-1.5">
-                  {scenario.title}
-                </h3>
-
-                <p className="text-xs text-white/70 font-normal leading-relaxed mb-3">
-                  {scenario.description}
-                </p>
-              </div>
-
-              {/* Expected AI Reaction Box */}
-              <div className="pt-3 border-t border-white/10 text-[10px] font-mono-tech bg-[#080C14] p-3 rounded-lg border border-white/5 space-y-1">
-                <span className="text-[#38BDF8] font-bold block">
-                  AI ADAPTIVE REACTION:
-                </span>
-                <span className="text-white/80 font-normal leading-normal block">
-                  {scenario.expectedAIAction}
-                </span>
-              </div>
-
-              {/* Trigger Button Row */}
-              <div className="mt-3 flex items-center justify-end text-[10px] font-mono-tech">
-                <span className={`flex items-center gap-1 font-bold ${isActive ? 'text-[#22C55E]' : 'text-white/40'}`}>
-                  {isActive ? 'CURRENTLY SIMULATING' : 'TRIGGER SCENARIO'} <Play className="w-3 h-3" />
-                </span>
+                {/* Trigger Button Row */}
+                <div className="pt-1.5 border-t border-[#8ACBD0]/40 flex items-center justify-end text-[9.5px] font-mono-tech">
+                  <span className={`flex items-center gap-1 font-bold ${isActive ? 'text-[#170C79]' : 'text-[#2C2B68]'}`}>
+                    {isActive ? 'CURRENTLY SIMULATING' : 'TRIGGER SCENARIO'} <Play className="w-3 h-3 text-[#56B6C6]" />
+                  </span>
+                </div>
               </div>
             </button>
           );
@@ -109,3 +129,6 @@ export const ScenarioControlCenter: React.FC<ScenarioControlCenterProps> = ({
     </div>
   );
 };
+
+
+

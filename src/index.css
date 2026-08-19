@@ -2,81 +2,202 @@
 
 @layer base {
   :root {
-    --bg-main: #080C14;
-    --bg-deep: #05080E;
-    --bg-panel: #0E1626;
-    --bg-panel-elevated: #131E33;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-accent: rgba(255, 255, 255, 0.16);
-    --color-ph-red: #E30613;
-    --color-ph-dark: #8B0000;
-    --color-kmrl-teal: #0284C7;
-    --color-status-green: #22C55E;
-    --color-status-amber: #F59E0B;
-    --color-status-red: #EF4444;
+    /* ==========================================================================
+       KMRL METRO CONTROL SYSTEM COLOR PALETTE
+       Color Hunt Reference: #170C79, #EFE3CA, #56B6C6, #8ACBD0
+       ========================================================================== */
+    --color-indigo: #170C79;         /* Deepest color — Headings, numbers, dark anchor */
+    --color-cream: #EFE3CA;          /* Warm cream — Large soft backgrounds, secondary surfaces */
+    --color-cream-soft: #F9F5EC;     /* Light cream neutral surface */
+    --color-teal: #56B6C6;           /* Teal cyan — Primary functional accent & active state */
+    --color-teal-hover: #48A1B0;     /* Darker teal for button hover */
+    --color-cyan-light: #8ACBD0;     /* Light cyan — Card frame surfaces, secondary highlights */
+
+    /* Global Semantic Tokens */
+    --bg-primary: #F6F1E6;           /* Predominantly light warm page background */
+    --bg-surface: #FFFFFF;           /* Crisp white for sub-panels and cards */
+    --bg-surface-cream: #EFE3CA;     /* Warm cream for inset panels */
+    --bg-surface-cyan: #8ACBD0;      /* Light cyan card frame surface */
+    --bg-navy-dark: #170C79;         /* Deep indigo — Top bar, sidebar, footer */
+    --bg-navy-elevated: #22158E;     /* Elevated indigo surface */
+
+    /* Typography & Contrast Colors (Dark readable text anchored in Deep Indigo) */
+    --text-primary: #170C79;         /* Deep indigo — Headings, technical metrics, bold labels */
+    --text-secondary: #2C2B68;       /* Dark muted indigo — Explanatory text & body copy */
+    --text-muted: #48477F;           /* Muted telemetry subtext */
+    --text-inverse: #EFE3CA;         /* Warm cream text on dark indigo surfaces */
+
+    /* Accents & Active Controls */
+    --color-accent: #56B6C6;
+    --color-accent-light: #8ACBD0;
+    --color-accent-hover: #48A1B0;
+
+    /* Borders */
+    --border-subtle: rgba(138, 203, 208, 0.40);
+    --border-medium: #8ACBD0;
+    --border-strong: #56B6C6;
+    --border-indigo: #170C79;
+
+    /* Semantic Status Indicators (Calm & Integrated) */
+    --color-status-green: #2E8B57;   /* Sea green */
+    --color-status-amber: #D48806;   /* Amber */
+    --color-status-red: #C53030;     /* Crimson */
+    --color-status-blue: #56B6C6;    /* Teal Cyan */
   }
 
   body {
-    background-color: #080C14;
-    color: #F8FAFC;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .font-mono-tech {
-    font-family: 'JetBrains Mono', 'Geist Mono', monospace;
-  }
-
-  .font-display {
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-  }
-
+  /* Precision Engineering / Technical UI Typography (Default for Headlines, Numbers, Labels) */
+  .font-mono-tech,
+  .font-mono,
+  .font-display,
+  .font-headline,
   .font-impact {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif !important;
-    letter-spacing: 0.06em;
+    font-family: 'JetBrains Mono', 'Geist Mono', monospace !important;
+    font-feature-settings: 'zero' 1, 'tnum' 1;
+  }
+
+  /* High Readability Body & Explanatory Typography */
+  .font-body,
+  .font-sans,
+  .font-inter {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   }
 }
 
-/* Professional Government / Authority Operations UI Styling */
+/* ==========================================================================
+   TRAIN WINDOW CARD & PANEL DESIGN SYSTEM (COLOR HUNT PALETTE)
+   Outer Frame: #8ACBD0 (Light Cyan) / Active Frame: #56B6C6 (Teal Cyan)
+   Inner Inset: #EFE3CA / #F9F5EC (Warm Cream) | Text: #170C79 (Deep Indigo)
+   ========================================================================== */
+
+.train-window-frame {
+  background-color: #8ACBD0;
+  border: 2px solid rgba(86, 182, 198, 0.5);
+  border-radius: 1.25rem;
+  padding: 0.5rem;
+  box-shadow: 
+    0 2px 6px rgba(23, 12, 121, 0.05),
+    0 8px 20px -4px rgba(23, 12, 121, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.train-window-frame-active {
+  background-color: #8ACBD0;
+  border: 2px solid #56B6C6;
+  border-radius: 1.25rem;
+  padding: 0.5rem;
+  box-shadow: 
+    0 2px 6px rgba(86, 182, 198, 0.15),
+    0 10px 24px -4px rgba(86, 182, 198, 0.25);
+}
+
+.train-window-pane {
+  background-color: #EFE3CA;
+  border: 1px solid rgba(86, 182, 198, 0.35);
+  border-radius: 0.875rem;
+  box-shadow: inset 0 2px 4px rgba(23, 12, 121, 0.03);
+}
+
+.train-window-subcard {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(138, 203, 208, 0.45);
+  border-radius: 0.5rem;
+}
+
 .gov-panel {
-  background: #0E1626;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #8ACBD0;
+  border: 2px solid rgba(86, 182, 198, 0.45);
+  border-radius: 1.25rem;
+  padding: 0.5rem;
+  box-shadow: 
+    0 2px 6px rgba(23, 12, 121, 0.05),
+    0 8px 20px -4px rgba(23, 12, 121, 0.06);
 }
 
 .gov-panel-elevated {
-  background: #131E33;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  background-color: #8ACBD0;
+  border: 2px solid #56B6C6;
+  border-radius: 1.25rem;
+  padding: 0.5rem;
+  box-shadow: 
+    0 4px 8px rgba(23, 12, 121, 0.06),
+    0 14px 28px -4px rgba(86, 182, 198, 0.15);
 }
 
 .gov-card {
-  background: #0B111E;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #EFE3CA;
+  border: 1px solid rgba(86, 182, 198, 0.4);
+  border-radius: 0.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .gov-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #FFFFFF;
+  border-color: #56B6C6;
+  box-shadow: 
+    0 4px 14px -2px rgba(23, 12, 121, 0.08),
+    0 0 0 1px rgba(86, 182, 198, 0.2);
 }
 
-/* Subtle Grid Background without cartoonish neon */
+/* Engineering Graph Paper Grid Background */
 .grid-bg-clean {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgba(86, 182, 198, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(86, 182, 198, 0.12) 1px, transparent 1px);
 }
 
-/* Custom Scrollbar */
+/* Button & Badge Utility Classes */
+.btn-primary {
+  background-color: #170C79;
+  color: #EFE3CA;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #56B6C6;
+  color: #170C79;
+  box-shadow: 0 4px 12px -2px rgba(86, 182, 198, 0.4);
+}
+
+.btn-accent {
+  background-color: #56B6C6;
+  color: #170C79;
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-accent:hover {
+  background-color: #48A1B0;
+  box-shadow: 0 4px 12px -2px rgba(86, 182, 198, 0.4);
+}
+
+/* Custom OCC Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #080C14;
+  background: #EFE3CA;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 3px;
+  background: #8ACBD0;
+  border-radius: 4px;
+  border: 2px solid #EFE3CA;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #E30613;
+  background: #56B6C6;
 }
+
+

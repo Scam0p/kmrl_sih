@@ -1,73 +1,99 @@
 import React from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Cpu, Train, Award, Layers } from 'lucide-react';
 
 export const CommandFooter: React.FC = () => {
   return (
-    <footer className="w-full bg-[#020305] border-t border-white/10 py-10 px-4 md:px-12 font-mono-tech select-none pl-20 md:pl-24 text-xs text-white/50">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Top Disclaimer Banner */}
-        <div className="p-3.5 rounded-xl bg-[#090C10] border border-[#E30613]/30 flex flex-wrap items-center justify-between gap-3 text-white/80">
-          <div className="flex items-center gap-2 text-[#E30613]">
-            <ShieldCheck className="w-4 h-4" />
-            <span className="font-bold tracking-wider text-[11px] uppercase">
-              SIMULATION DEMONSTRATION LAYER ONLY
+    <footer className="w-full bg-[#170C79] border-t-2 border-[#56B6C6]/50 py-10 px-4 md:px-8 font-mono-tech select-none text-xs text-[#EFE3CA] shadow-2xl">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Top Operational Disclaimer Banner */}
+        <div className="p-4 rounded-xl bg-[#120963] border-2 border-[#56B6C6]/60 flex flex-wrap items-center justify-between gap-3 text-[#EFE3CA] shadow-md">
+          <div className="flex items-center gap-2.5 text-[#56B6C6]">
+            <ShieldCheck className="w-5 h-5 flex-shrink-0" />
+            <span className="font-bold tracking-wider text-xs uppercase">
+              HIGH-FIDELITY SIMULATION & DEMONSTRATION SUITE
             </span>
           </div>
-          <span className="text-[10px] text-white/60">
-            NOT CONNECTED TO LIVE KOCHI METRO RAIL LIMITED OPERATIONAL SIGNALING OR ATS SYSTEMS
+          <span className="text-xs text-[#EFE3CA]/85 font-inter font-medium">
+            Smart India Hackathon 2026 • Kochi Metro Rail Limited (KMRL) AI Operations Protocol
           </span>
         </div>
 
-        {/* Middle Meta Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 border-t border-white/5">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="font-impact text-lg text-[#E30613] tracking-wider">
-                POWERHOUSE
-              </span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-white/70">
-                TEAM
+        {/* Middle 4-Column Structured Engineering Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+          {/* Col 1: System Identity */}
+          <div className="space-y-2.5 bg-[#120963]/50 p-4 rounded-xl border border-[#56B6C6]/30">
+            <div className="flex items-center gap-2">
+              <Train className="w-4 h-4 text-[#56B6C6]" />
+              <span className="font-mono-tech font-bold text-sm text-[#EFE3CA] tracking-wide uppercase">
+                KMRL AI DISPATCH
               </span>
             </div>
-            <p className="text-[10px] text-white/40 leading-relaxed font-light">
-              Advanced AI Train Induction Planning & Dispatch Scheduling Platform engineered for SIH 2026.
+            <p className="font-inter text-xs text-[#EFE3CA]/80 leading-relaxed">
+              Adaptive train induction planning and real-time headway synchronization for the Aluva to Tripunithura metro corridor.
             </p>
           </div>
 
-          <div>
-            <span className="text-[10px] text-white/70 uppercase font-bold block mb-2">
-              PROBLEM STATEMENT
-            </span>
-            <p className="text-[10px] text-white/40 leading-relaxed font-light">
-              SIH 2026: AI-Driven Train Induction Planning & Scheduling for Kochi Metro Rail Limited (KMRL).
+          {/* Col 2: Problem Statement */}
+          <div className="space-y-2.5 bg-[#120963]/50 p-4 rounded-xl border border-[#56B6C6]/30">
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-[#56B6C6]" />
+              <span className="font-mono-tech font-bold text-sm text-[#EFE3CA] tracking-wide uppercase">
+                PROBLEM STATEMENT
+              </span>
+            </div>
+            <p className="font-inter text-xs text-[#EFE3CA]/80 leading-relaxed">
+              SIH 2026: Dynamic scheduling of rolling stock from stabling sidings during demand surges, maintenance, and disruptions.
             </p>
           </div>
 
-          <div>
-            <span className="text-[10px] text-white/70 uppercase font-bold block mb-2">
-              SYSTEM ARCHITECTURE
-            </span>
-            <p className="text-[10px] text-white/40 leading-relaxed font-light">
-              Multi-Objective Pareto Optimization • Real-time CBTC Telemetry Ingestion • Dynamic Siding Induction.
+          {/* Col 3: System Architecture */}
+          <div className="space-y-2.5 bg-[#120963]/50 p-4 rounded-xl border border-[#56B6C6]/30">
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#56B6C6]" />
+              <span className="font-mono-tech font-bold text-sm text-[#EFE3CA] tracking-wide uppercase">
+                ARCHITECTURE
+              </span>
+            </div>
+            <p className="font-inter text-xs text-[#EFE3CA]/80 leading-relaxed">
+              Multi-objective Pareto heuristics, real-time CBTC signal telemetry ingestion, and depot turnout turnout validation.
             </p>
           </div>
 
-          <div>
-            <span className="text-[10px] text-white/70 uppercase font-bold block mb-2">
-              SIMULATION ENGINE
-            </span>
-            <p className="text-[10px] text-white/40 leading-relaxed font-light">
-              Deterministic High-Fidelity Front-End Engine • Latency: 14ms • Build: 2026.08-SIH-GOLD.
+          {/* Col 4: Engine Performance */}
+          <div className="space-y-2.5 bg-[#120963]/50 p-4 rounded-xl border border-[#56B6C6]/30">
+            <div className="flex items-center gap-2">
+              <Cpu className="w-4 h-4 text-[#56B6C6]" />
+              <span className="font-mono-tech font-bold text-sm text-[#EFE3CA] tracking-wide uppercase">
+                ENGINE STATS
+              </span>
+            </div>
+            <p className="font-inter text-xs text-[#EFE3CA]/80 leading-relaxed">
+              42ms optimization latency • GoA2 automation protocol • 750V DC traction power monitoring • 90-minute peak window.
             </p>
           </div>
         </div>
 
-        {/* Bottom Credits */}
-        <div className="pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-3 text-[10px] text-white/30">
-          <span>© 2026 POWERHOUSE • KOCHI METRO RAIL LIMITED SIMULATION SUITE</span>
-          <span className="text-[#38BDF8]">KMRL AI TRAIN INDUCTION DASHBOARD</span>
+        {/* Bottom Credits & Copyright Bar */}
+        <div className="pt-6 border-t border-[#56B6C6]/30 flex flex-wrap items-center justify-between gap-4 text-xs text-[#EFE3CA]/70">
+          <div className="flex items-center gap-2">
+            <span>© 2026 POWERHOUSE INNOVATION TEAM</span>
+            <span className="text-[#56B6C6]">•</span>
+            <span>DEPT. OF CSE-IOT & CSBT</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="px-2.5 py-1 rounded bg-[#120963] border border-[#56B6C6]/40 text-[#56B6C6] font-bold text-[11px]">
+              SIH 2026 PROTOTYPE
+            </span>
+            <span className="text-[#EFE3CA] font-bold">
+              KOCHI METRO RAIL LIMITED
+            </span>
+          </div>
         </div>
       </div>
     </footer>
   );
 };
+
+
+

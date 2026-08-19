@@ -11,11 +11,13 @@ import {
 import { CaseSwitcher } from './CaseSwitcher';
 import { KPIRibbon } from './KPIRibbon';
 import { RailwayNetwork } from '../railway/RailwayNetwork';
+import { TrainDemonstration } from '../railway/TrainDemonstration';
 import { AIEnginePanel } from './AIEnginePanel';
 import { DecisionFeed } from './DecisionFeed';
 import { FleetOverview } from '../fleet/FleetOverview';
 import { ScenarioControlCenter } from '../scenarios/ScenarioControlCenter';
 import { PerformanceComparison } from '../comparison/PerformanceComparison';
+import { TeamSection } from '../team/TeamSection';
 
 interface ControlCentreProps {
   currentCase: CaseType;
@@ -71,9 +73,15 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
   isCaseTransitioning
 }) => {
   return (
-    <div id="control-deck" className="space-y-10 max-w-7xl mx-auto">
+    <div className="space-y-12 max-w-7xl mx-auto">
       {/* 1. Paradigm Case Selector */}
-      <section>
+      <section id="control-deck" className="space-y-3">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+          <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+            OPERATIONAL PARADIGM SELECTOR
+          </span>
+        </div>
         <CaseSwitcher
           currentCase={currentCase}
           onSelectCase={onSelectCase}
@@ -82,15 +90,38 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
       </section>
 
       {/* 2. Core Executive KPIs Ribbon */}
-      <section>
+      <section className="space-y-3">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+          <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+            EXECUTIVE TELEMETRY METRICS
+          </span>
+        </div>
         <KPIRibbon
           kpis={kpis}
           currentCase={currentCase}
         />
       </section>
 
-      {/* 3. Master Expansive Railway Simulation Deck (With Integrated Side Controls) */}
-      <section id="network-section">
+      {/* 3. Master Expansive Railway Simulation Deck & Corridor Map */}
+      <section id="network-section" className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+              <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+                CORRIDOR SIMULATION
+              </span>
+            </div>
+            <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
+              LIVE NETWORK & HEADWAY SIMULATION
+            </h2>
+            <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
+              Aluva to Tripunithura mainline track circuit with real-time stabling at Muttom Maintenance Depot
+            </p>
+          </div>
+        </div>
+
         <RailwayNetwork
           trains={trains}
           stations={stations}
@@ -109,26 +140,65 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
           onReset={onReset}
           onRunOptimization={onRunOptimization}
         />
+
+        {/* Spacious Rolling Stock Demonstration & Carriage Inspection */}
+        <TrainDemonstration
+          trains={trains}
+          selectedTrain={selectedTrain}
+          onSelectTrain={onSelectTrain}
+        />
       </section>
 
       {/* 4. AI Decision Engine & Event Stream */}
-      <section id="ai-engine-section" className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7">
-          <AIEnginePanel
-            recommendations={recommendations}
-            onDeployRecommendation={onDeployRecommendation}
-            onRunOptimization={onRunOptimization}
-            isOptimizing={isOptimizing}
-            currentCase={currentCase}
-          />
+      <section id="ai-engine-section" className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+              HEURISTIC ENGINE & EVENT LOG
+            </span>
+          </div>
+          <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
+            AI DECISION ENGINE & TELEMETRY STREAM
+          </h2>
+          <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
+            Multi-objective Pareto solver generating real-time induction recommendations and audit trail
+          </p>
         </div>
-        <div className="lg:col-span-5">
-          <DecisionFeed logs={eventLogs} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-7">
+            <AIEnginePanel
+              recommendations={recommendations}
+              onDeployRecommendation={onDeployRecommendation}
+              onRunOptimization={onRunOptimization}
+              isOptimizing={isOptimizing}
+              currentCase={currentCase}
+            />
+          </div>
+          <div className="lg:col-span-5">
+            <DecisionFeed logs={eventLogs} />
+          </div>
         </div>
       </section>
 
       {/* 5. Fleet Operational Roster */}
-      <section id="fleet-section">
+      <section id="fleet-section" className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+              ROLLING STOCK ROSTER
+            </span>
+          </div>
+          <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
+            FLEET READINESS & TELEMETRY MATRIX
+          </h2>
+          <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
+            Individual trainset health scores, maintenance schedules, traction power draw, and depot turnout status
+          </p>
+        </div>
+
         <FleetOverview
           trains={trains}
           onSelectTrain={onSelectTrain}
@@ -137,7 +207,22 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
       </section>
 
       {/* 6. Contingency Scenarios Simulator */}
-      <section id="scenarios-section">
+      <section id="scenarios-section" className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+              STRESS-TEST SIMULATOR
+            </span>
+          </div>
+          <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
+            OPERATIONAL CONTINGENCY MATRIX
+          </h2>
+          <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
+            Inject real-world operational disruptions and verify automated AI mitigation resilience
+          </p>
+        </div>
+
         <ScenarioControlCenter
           activeScenario={activeScenario}
           onSelectScenario={onSelectScenario}
@@ -145,9 +230,28 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
       </section>
 
       {/* 7. Empirical Performance Benchmark & Comparison */}
-      <section id="comparison-section">
+      <section id="comparison-section" className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
+            <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
+              QUANTITATIVE VALIDATION
+            </span>
+          </div>
+          <h2 className="font-mono-tech font-bold text-xl sm:text-2xl text-[#170C79] uppercase tracking-wide">
+            EMPIRICAL PERFORMANCE BENCHMARK
+          </h2>
+          <p className="font-inter text-xs sm:text-sm text-[#2C2B68] font-medium mt-0.5">
+            Comparative analysis across Manual Dispatch, Conventional CBTC, and AI-Powered Induction paradigms
+          </p>
+        </div>
+
         <PerformanceComparison currentCase={currentCase} />
       </section>
+
+      {/* 8. Team Section */}
+      <TeamSection />
     </div>
   );
 };
+

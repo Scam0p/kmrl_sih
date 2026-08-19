@@ -8,55 +8,56 @@ interface TrainVehicleProps {
 }
 
 export const TrainVehicle: React.FC<TrainVehicleProps> = ({ train, onClick, isSelected }) => {
-  let statusColor = '#22C55E'; // Clean Green
+  let statusColor = '#170C79';
   let label = 'IN SERVICE';
 
   if (train.status === 'INDUCTING') {
-    statusColor = '#38BDF8'; // Clean Sky Blue
+    statusColor = '#56B6C6'; // Teal Cyan
     label = 'INDUCTING';
   } else if (train.status === 'READY_INDUCTION') {
-    statusColor = '#E30613';
+    statusColor = '#56B6C6';
     label = 'READY';
   } else if (train.status === 'STANDBY') {
-    statusColor = '#F59E0B'; // Clean Amber
+    statusColor = '#2C2B68';
     label = 'STANDBY';
   } else if (train.status === 'MAINTENANCE') {
-    statusColor = '#EF4444';
+    statusColor = '#C53030';
     label = 'FAULT';
   }
 
-  // Calculated SVG coordinates for the expanded 1200x480 canvas
+  // Calculated SVG coordinates for the expanded 1200x520 canvas
+  // Down line is at Y=230, Up line is at Y=350
   let posX = 200;
-  let posY = 290;
+  let posY = 230;
 
   if (train.status === 'STANDBY' || train.status === 'READY_INDUCTION') {
     if (train.id === 'T02') {
-      posX = 70;
+      posX = 75;
       posY = 95;
     } else if (train.id === 'T06') {
-      posX = 120;
+      posX = 125;
       posY = 95;
     } else if (train.id === 'T08') {
-      posX = 170;
+      posX = 175;
       posY = 95;
     } else {
-      posX = 110;
+      posX = 120;
       posY = 95;
     }
   } else if (train.status === 'MAINTENANCE') {
     posX = 390;
-    posY = 210; // Kalamassery emergency siding
+    posY = 150; // Kalamassery emergency siding
   } else if (train.status === 'INDUCTING') {
-    // Siding transition from depot (140, 100) to Aluva mainline (200, 290)
+    // Siding transition from depot (140, 95) to Aluva mainline (200, 230)
     const t = Math.min(1, train.trackProgress / 20);
     posX = 140 + t * 60;
-    posY = 100 + t * 190;
+    posY = 95 + t * 135;
   } else {
     // Mainline track progress: 18% (Aluva) to 96% (Tripunithura) -> X: 200 to 1120
     const normalized = (train.trackProgress - 18) / (96 - 18);
     const clamped = Math.max(0, Math.min(1, normalized));
     posX = 200 + clamped * 920;
-    posY = train.direction === 'DOWN' ? 272 : 308; // Clear separation for Down / Up lines
+    posY = train.direction === 'DOWN' ? 230 : 350; // Clear 120px vertical separation
   }
 
   const loadPercentage = Math.round((train.passengerLoad / train.capacity) * 100);
@@ -69,20 +70,20 @@ export const TrainVehicle: React.FC<TrainVehicleProps> = ({ train, onClick, isSe
         transform: `translate(${posX}px, ${posY}px)`
       }}
     >
-      {/* Subtle selection ring without chaotic pulsing */}
+      {/* Selection ring in Teal Cyan */}
       {isSelected && (
         <circle
           cx="0"
           cy="0"
           r="26"
           fill="none"
-          stroke="#38BDF8"
-          strokeWidth="1.5"
+          stroke="#56B6C6"
+          strokeWidth="2.5"
           strokeDasharray="4 2"
         />
       )}
 
-      {/* Stylized Metro Train Carriage (Clear, High-Contrast Silhouette) */}
+      {/* Stylized Metro Train Carriage */}
       <g transform="translate(-28, -13)">
         {/* Main Body */}
         <rect
@@ -91,8 +92,8 @@ export const TrainVehicle: React.FC<TrainVehicleProps> = ({ train, onClick, isSe
           width="56"
           height="26"
           rx="5"
-          fill="#0B111E"
-          stroke={isSelected ? '#38BDF8' : statusColor}
+          fill="#FFFFFF"
+          stroke={isSelected ? '#56B6C6' : statusColor}
           strokeWidth={isSelected ? '2.5' : '1.5'}
         />
 
@@ -110,56 +111,56 @@ export const TrainVehicle: React.FC<TrainVehicleProps> = ({ train, onClick, isSe
         )}
 
         {/* Windows */}
-        <rect x="9" y="6" width="7" height="6" rx="1" fill="#38BDF8" opacity="0.9" />
-        <rect x="20" y="6" width="7" height="6" rx="1" fill="#38BDF8" opacity="0.9" />
-        <rect x="31" y="6" width="7" height="6" rx="1" fill="#38BDF8" opacity="0.9" />
-        <rect x="42" y="6" width="5" height="6" rx="1" fill="#38BDF8" opacity="0.9" />
+        <rect x="9" y="6" width="7" height="6" rx="1" fill="#8ACBD0" />
+        <rect x="20" y="6" width="7" height="6" rx="1" fill="#8ACBD0" />
+        <rect x="31" y="6" width="7" height="6" rx="1" fill="#8ACBD0" />
+        <rect x="42" y="6" width="5" height="6" rx="1" fill="#8ACBD0" />
 
         {/* Load Bar */}
-        <rect x="8" y="17" width="40" height="3.5" rx="1" fill="rgba(255,255,255,0.15)" />
+        <rect x="8" y="17" width="40" height="3.5" rx="1" fill="#EFE3CA" />
         <rect
           x="8"
           y="17"
           width={Math.max(2, (loadPercentage / 100) * 40)}
           height="3.5"
           rx="1"
-          fill={loadPercentage > 85 ? '#EF4444' : loadPercentage > 65 ? '#F59E0B' : '#22C55E'}
+          fill={loadPercentage > 85 ? '#C53030' : '#56B6C6'}
         />
       </g>
 
-      {/* Train ID Badge (Top) */}
+      {/* Train ID Badge (Top with clear margin) */}
       <rect
         x="-16"
-        y="-27"
+        y="-26"
         width="32"
-        height="12"
-        rx="2.5"
-        fill="#05080E"
+        height="11"
+        rx="2"
+        fill="#FFFFFF"
         stroke={statusColor}
-        strokeWidth="1"
+        strokeWidth="1.2"
       />
       <text
         x="0"
         y="-18"
         textAnchor="middle"
-        fill="#FFFFFF"
-        fontSize="8.5"
+        fill="#170C79"
+        fontSize="8"
         fontWeight="bold"
         fontFamily="JetBrains Mono"
       >
         {train.id}
       </text>
 
-      {/* Speed / Status Pill (Bottom) */}
+      {/* Speed / Status Pill (Bottom with clear margin) */}
       <rect
         x="-22"
         y="16"
         width="44"
         height="11"
         rx="2"
-        fill="#05080E"
-        stroke="rgba(255,255,255,0.15)"
-        strokeWidth="0.5"
+        fill="#FFFFFF"
+        stroke="#8ACBD0"
+        strokeWidth="1"
       />
       <text
         x="0"
@@ -175,3 +176,6 @@ export const TrainVehicle: React.FC<TrainVehicleProps> = ({ train, onClick, isSe
     </g>
   );
 };
+
+
+

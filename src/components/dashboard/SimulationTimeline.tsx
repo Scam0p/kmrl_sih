@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, RotateCcw, FastForward, Clock, Flag } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock } from 'lucide-react';
 
 interface SimulationTimelineProps {
   simTime: string;
@@ -38,17 +38,17 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
   ];
 
   return (
-    <div className="tech-panel-elevated tech-corner rounded-xl p-4 md:p-5 border border-white/15 shadow-2xl">
+    <div className="gov-panel rounded-xl p-4 md:p-5 border border-[#556270]/20 bg-[#FFFFFF] shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
         {/* Left: Live Playback Controls */}
         <div className="flex items-center gap-3">
           {/* Play / Pause Toggle */}
           <button
             onClick={onTogglePlay}
-            className={`p-2.5 rounded-lg font-bold text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95 shadow-md ${
+            className={`p-2.5 rounded-lg font-bold text-xs flex items-center gap-2 cursor-pointer transition-all active:scale-95 shadow-sm ${
               isPlaying
-                ? 'bg-[#E30613] text-white hover:bg-[#FF1A2E] shadow-[0_0_15px_rgba(227,6,19,0.5)]'
-                : 'bg-[#65FF9A] text-black hover:bg-[#59F3FF] shadow-[0_0_15px_rgba(101,255,154,0.5)]'
+                ? 'bg-[#151B24] text-[#EDEFF2] hover:bg-[#D9A24B] hover:text-[#151B24]'
+                : 'bg-[#D9A24B] text-[#151B24] hover:bg-[#C48D37]'
             }`}
           >
             {isPlaying ? (
@@ -65,15 +65,15 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
           </button>
 
           {/* Speed Multipliers */}
-          <div className="flex items-center bg-black/50 border border-white/10 rounded-lg p-1 text-xs font-mono-tech">
+          <div className="flex items-center bg-[#F4F6F9] border border-[#556270]/20 rounded-lg p-1 text-xs font-mono-tech">
             {[0.5, 1, 2, 4].map((spd) => (
               <button
                 key={spd}
                 onClick={() => onSetSpeed(spd)}
                 className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
                   simSpeed === spd
-                    ? 'bg-[#59F3FF] text-black font-bold shadow'
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#151B24] text-[#EDEFF2] font-bold shadow-sm'
+                    : 'text-[#556270] hover:text-[#151B24] hover:bg-[#EDEFF2]'
                 }`}
               >
                 {spd}×
@@ -84,7 +84,7 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
           {/* Reset button */}
           <button
             onClick={onReset}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono-tech"
+            className="p-2 rounded-lg bg-[#F4F6F9] hover:bg-[#EDEFF2] border border-[#556270]/20 text-[#556270] hover:text-[#151B24] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono-tech"
             title="Reset to 08:00 start"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -93,21 +93,21 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
         </div>
 
         {/* Current Time Clock Readout */}
-        <div className="flex items-center gap-3 bg-[#0D1117] border border-[#59F3FF]/40 px-4 py-1.5 rounded-lg shadow-[0_0_15px_rgba(89,243,255,0.15)] font-mono-tech">
-          <Clock className="w-4 h-4 text-[#59F3FF]" />
-          <span className="text-sm md:text-base font-black text-[#59F3FF] tracking-widest">
+        <div className="flex items-center gap-3 bg-[#F4F6F9] border border-[#556270]/20 px-4 py-1.5 rounded-lg shadow-sm font-mono-tech">
+          <Clock className="w-4 h-4 text-[#D9A24B]" />
+          <span className="text-sm md:text-base font-bold text-[#151B24] tracking-widest">
             {simTime}
           </span>
-          <span className="text-[10px] text-white/50">IST MORNING PEAK</span>
+          <span className="text-[10px] text-[#556270]">IST MORNING PEAK</span>
         </div>
       </div>
 
       {/* Progress Bar & Timeline Track */}
       <div className="relative pt-6 pb-2">
         {/* Track Line */}
-        <div className="w-full h-2 bg-white/10 rounded-full relative overflow-hidden">
+        <div className="w-full h-2 bg-[#EDEFF2] rounded-full relative overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-[#59F3FF] via-[#E30613] to-[#65FF9A] rounded-full transition-all duration-300"
+            className="h-full bg-[#D9A24B] rounded-full transition-all duration-300"
             style={{ width: `${progressPct}%` }}
           ></div>
         </div>
@@ -117,8 +117,8 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
           className="absolute top-4 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-all duration-300 z-20"
           style={{ left: `${progressPct}%` }}
         >
-          <div className="w-4 h-4 rounded-full bg-[#E30613] border-2 border-white shadow-[0_0_10px_#E30613] animate-pulse"></div>
-          <div className="w-0.5 h-6 bg-[#E30613]"></div>
+          <div className="w-4 h-4 rounded-full bg-[#151B24] border-2 border-[#D9A24B] shadow-sm"></div>
+          <div className="w-0.5 h-6 bg-[#151B24]"></div>
         </div>
 
         {/* Milestones / Key Events along timeline */}
@@ -129,9 +129,9 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
               className="flex flex-col items-center"
               style={{ width: `${100 / milestones.length}%` }}
             >
-              <div className={`w-1.5 h-1.5 rounded-full mb-1 ${m.highlight ? 'bg-[#59F3FF] shadow-[0_0_6px_#59F3FF]' : m.alert ? 'bg-[#FF1A2E]' : 'bg-white/30'}`}></div>
-              <span className="font-bold text-white/90">{m.label}</span>
-              <span className={`text-[8px] uppercase tracking-tighter truncate max-w-[80px] text-center ${m.highlight ? 'text-[#59F3FF] font-bold' : m.alert ? 'text-[#FF1A2E]' : 'text-white/40'}`}>
+              <div className={`w-1.5 h-1.5 rounded-full mb-1 ${m.highlight ? 'bg-[#D9A24B]' : m.alert ? 'bg-[#C04848]' : 'bg-[#556270]/40'}`}></div>
+              <span className="font-bold text-[#151B24]">{m.label}</span>
+              <span className={`text-[8px] uppercase tracking-tighter truncate max-w-[80px] text-center ${m.highlight ? 'text-[#D9A24B] font-bold' : m.alert ? 'text-[#C04848]' : 'text-[#556270]'}`}>
                 {m.title}
               </span>
             </div>
@@ -141,3 +141,4 @@ export const SimulationTimeline: React.FC<SimulationTimelineProps> = ({
     </div>
   );
 };
+

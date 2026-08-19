@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSimulation } from './hooks/useSimulation';
-import { PowerhouseBrand } from './components/branding/PowerhouseBrand';
 import { TopStatusBar } from './components/layout/TopStatusBar';
+import { KMRLSlidingNav } from './components/layout/KMRLSlidingNav';
 import { HeroSection } from './components/hero/HeroSection';
 import { ControlCentre } from './components/dashboard/ControlCentre';
 import { TrainDetailDrawer } from './components/modals/TrainDetailDrawer';
@@ -10,6 +10,8 @@ import { AIOptimizationModal } from './components/modals/AIOptimizationModal';
 import { CommandFooter } from './components/footer/CommandFooter';
 
 export const App: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const {
     currentCase,
     handleCaseChange,
@@ -48,23 +50,31 @@ export const App: React.FC = () => {
   const activeTrainsCount = trains.filter(t => t.status === 'IN_SERVICE' || t.status === 'INDUCTING').length;
 
   return (
-    <div className="relative min-h-screen bg-[#050608] text-[#F5F7FA] overflow-x-hidden">
-      {/* 1. Persistent Powerhouse Brand Bar (Left Edge) */}
-      <PowerhouseBrand currentCase={currentCase} />
+    <div className="relative min-h-screen bg-[#F6F1E6] text-[#170C79] overflow-x-hidden">
+      {/* 1. Dark Top Operations Status Header (#170C79 Deep Indigo) with Menu Trigger */}
+      <TopStatusBar
+        simTime={simTime}
+        currentCase={currentCase}
+        activeTrainsCount={activeTrainsCount}
+        totalTrainsCount={trains.length}
+        onReset={resetSimulation}
+        onRunOptimization={runAIOptimization}
+        isOptimizing={isOptimizing}
+        onToggleMenu={() => setIsMenuOpen(prev => !prev)}
+      />
 
-      {/* 2. Main Viewport Container (Offset for left branding rail) */}
-      <div className="pl-16 md:pl-20 flex flex-col min-h-screen">
-        {/* Persistent Top Status Bar */}
-        <TopStatusBar
-          simTime={simTime}
-          currentCase={currentCase}
-          activeTrainsCount={activeTrainsCount}
-          totalTrainsCount={trains.length}
-          onReset={resetSimulation}
-          onRunOptimization={runAIOptimization}
-          isOptimizing={isOptimizing}
-        />
+      {/* 2. Left Sliding Operations Menu Drawer with Smooth Animation */}
+      <KMRLSlidingNav
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        currentCase={currentCase}
+        simTime={simTime}
+        activeTrainsCount={activeTrainsCount}
+        totalTrainsCount={trains.length}
+      />
 
+      {/* 3. Main Viewport Container */}
+      <div className="flex flex-col min-h-screen">
         {/* Main Content Sections */}
         <main className="flex-1 space-y-12 pb-16">
           {/* Hero Section */}
@@ -75,7 +85,7 @@ export const App: React.FC = () => {
             onCaseChange={handleCaseChange}
           />
 
-          {/* Main Control Centre Deck */}
+          {/* Main Control Centre Deck (All Sections + Train Demonstration + Team Roster) */}
           <div className="px-4 md:px-8 max-w-7xl mx-auto">
             <ControlCentre
               currentCase={currentCase}
@@ -106,7 +116,7 @@ export const App: React.FC = () => {
           </div>
         </main>
 
-        {/* Command Footer */}
+        {/* Command Footer (Organized & Symmetric) */}
         <CommandFooter />
       </div>
 
@@ -132,3 +142,5 @@ export const App: React.FC = () => {
 };
 
 export default App;
+
+
