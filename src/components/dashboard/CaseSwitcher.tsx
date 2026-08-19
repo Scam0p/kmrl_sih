@@ -1,6 +1,7 @@
 import React from 'react';
 import { CaseType } from '../../types/simulation';
-import { ShieldAlert, Activity, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ShieldAlert, Activity, Cpu } from 'lucide-react';
+import { ActionSlider } from '../ui/ActionSlider';
 
 interface CaseSwitcherProps {
   currentCase: CaseType;
@@ -76,24 +77,23 @@ export const CaseSwitcher: React.FC<CaseSwitcherProps> = ({
           </h2>
         </div>
         <p className="font-inter text-xs text-[#2C2B68] max-w-md font-medium">
-          Evaluate KMRL dispatching under identical passenger traffic and emergency scenarios
+          Slide the safety action control to transition dispatch architecture across the 25.6 km corridor
         </p>
       </div>
 
-      {/* 3 Refined Cards Grid */}
+      {/* 3 Refined Cards Grid with Action Sliders */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {cases.map((c) => {
           const isSelected = currentCase === c.id;
           const Icon = c.icon;
 
           return (
-            <button
+            <div
               key={c.id}
-              onClick={() => onSelectCase(c.id)}
-              className={`text-left rounded-xl p-5 transition-colors relative cursor-pointer flex flex-col justify-between select-none ${
+              className={`rounded-2xl p-5 transition-colors relative flex flex-col justify-between select-none ${
                 isSelected
                   ? 'bg-[#EFE3CA] border-2 border-[#170C79] shadow-md'
-                  : 'bg-[#EFE3CA] border-2 border-[#8ACBD0] hover:border-[#56B6C6] shadow-xs'
+                  : 'bg-[#EFE3CA] border-2 border-[#8ACBD0] shadow-xs'
               }`}
             >
               <div>
@@ -101,14 +101,14 @@ export const CaseSwitcher: React.FC<CaseSwitcherProps> = ({
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono-tech font-bold text-lg text-[#2C2B68]">
+                      <span className="font-mono-tech font-bold text-lg text-[#170C79]">
                         {c.index}
                       </span>
                       <h3 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79] uppercase tracking-tight">
                         {c.title}
                       </h3>
                     </div>
-                    <span className="text-[9.5px] font-mono-tech text-[#2C2B68] font-bold tracking-wider uppercase block mt-0.5">
+                    <span className="text-[9.5px] font-mono-tech text-[#56B6C6] font-bold tracking-wider uppercase block mt-0.5">
                       {c.subtitle}
                     </span>
                   </div>
@@ -116,9 +116,9 @@ export const CaseSwitcher: React.FC<CaseSwitcherProps> = ({
                   <div className={`p-2 rounded-lg border flex-shrink-0 ${
                     isSelected 
                       ? 'bg-[#170C79] border-[#170C79] text-[#EFE3CA]' 
-                      : 'bg-[#FFFFFF] border-[#8ACBD0] text-[#2C2B68]'
+                      : 'bg-[#FFFFFF] border-[#8ACBD0] text-[#170C79]'
                   }`}>
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 text-[#56B6C6]" />
                   </div>
                 </div>
 
@@ -128,7 +128,7 @@ export const CaseSwitcher: React.FC<CaseSwitcherProps> = ({
                 </p>
               </div>
 
-              <div className="space-y-3 pt-3 border-t border-[#8ACBD0]/50">
+              <div className="space-y-3 pt-3 border-t border-[#8ACBD0]">
                 {/* Metrics Readout Grid */}
                 <div className="grid grid-cols-2 gap-2 font-mono-tech text-xs">
                   <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#8ACBD0]">
@@ -153,31 +153,24 @@ export const CaseSwitcher: React.FC<CaseSwitcherProps> = ({
                   </div>
                 </div>
 
-                {/* Status Indicator Bar */}
-                <div className="flex items-center justify-between text-[10px] font-mono-tech pt-1">
-                  <span className="text-[#2C2B68] font-bold">STATE:</span>
-                  <span className={`flex items-center gap-1 font-bold ${isSelected ? 'text-[#170C79]' : 'text-[#2C2B68]'}`}>
-                    {isSelected ? (
-                      <span className="flex items-center gap-1 text-[#170C79]">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#56B6C6]" /> CURRENTLY ACTIVE
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 hover:text-[#170C79]">
-                        <span>SWITCH PARADIGM</span>
-                        <ArrowRight className="w-3 h-3 text-[#2C2B68]" />
-                      </span>
-                    )}
-                  </span>
+                {/* Smooth Action Slider */}
+                <div className="pt-1">
+                  <ActionSlider
+                    isActive={isSelected}
+                    label={`SLIDE TO ENABLE ${c.index}`}
+                    activeLabel="ACTIVE PARADIGM"
+                    onActivate={() => onSelectCase(c.id)}
+                  />
                 </div>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>
 
       {isTransitioning && (
         <div className="text-center py-1">
-          <span className="font-mono-tech text-xs text-[#56B6C6] font-bold">
+          <span className="font-mono-tech text-xs text-[#56B6C6] font-bold animate-pulse">
             CALIBRATING NETWORK TIMETABLE & CBTC BLOCKS...
           </span>
         </div>

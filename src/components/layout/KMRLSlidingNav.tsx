@@ -12,20 +12,16 @@ import {
   Activity, 
   BarChart2, 
   History,
-  HelpCircle,
   BookOpen,
   Bot,
   Bell,
   User,
   LogOut, 
   Clock, 
-  ChevronRight, 
-  Shield, 
-  KeyRound 
+  ChevronRight
 } from 'lucide-react';
 import { CaseType } from '../../types/simulation';
 import { useAuth } from '../../context/AuthContext';
-import { UserRole } from '../../types/auth';
 import { PortalModalView } from '../portal/PortalModal';
 
 interface KMRLSlidingNavProps {
@@ -94,40 +90,48 @@ const NAVIGATION_GROUPS: NavCategory[] = [
 export const KMRLSlidingNav: React.FC<KMRLSlidingNavProps> = ({
   isOpen,
   onClose,
-  currentCase,
   simTime,
   activeTrainsCount,
   totalTrainsCount,
   onOpenPortalModal
 }) => {
-  const { user, logout, loginWithRole } = useAuth();
+  const { user, logout } = useAuth();
   const [activeItem, setActiveItem] = useState<string>('dashboard');
+  const [liveClock, setLiveClock] = useState<string>('');
 
+  // Live real clock
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      const heroEl = document.getElementById('hero-section');
-      const networkEl = document.getElementById('network-section');
-      const aiEl = document.getElementById('ai-engine-section');
-      const scenariosEl = document.getElementById('scenarios-section');
-      const comparisonEl = document.getElementById('comparison-section');
+    const updateTime = () => {
+      const now = new Date();
+      setLiveClock(now.toLocaleTimeString('en-GB', { hour12: false }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-      if (comparisonEl && scrollPosition >= comparisonEl.offsetTop) {
-        setActiveItem('analytics');
-      } else if (scenariosEl && scrollPosition >= scenariosEl.offsetTop) {
-        setActiveItem('scenarios');
-      } else if (aiEl && scrollPosition >= aiEl.offsetTop) {
-        setActiveItem('ai-operations');
-      } else if (networkEl && scrollPosition >= networkEl.offsetTop) {
-        setActiveItem('network');
-      } else if (heroEl) {
-        setActiveItem('dashboard');
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
       }
     };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const handleNavClick = (item: NavItem) => {
     if (item.isModal && item.modalView) {
@@ -157,24 +161,24 @@ export const KMRLSlidingNav: React.FC<KMRLSlidingNavProps> = ({
       {/* Backdrop Blur Overlay with Smooth Fade */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 z-50 bg-[#170C79]/60 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
+        className={`fixed inset-0 z-50 bg-[#170C79]/60 backdrop-blur-xs transition-opacity duration-300 ease-in-out ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         aria-hidden="true"
       />
 
-      {/* Sliding Operations Portal Window on Left */}
+      {/* Sliding Operations Portal Window (#3368A0 Background, #C8DFDB Cards/Borders, #F2EFE7 Text) */}
       <aside
-        className={`fixed left-0 top-0 bottom-0 z-50 w-76 sm:w-88 bg-[#170C79] border-r-2 border-[#56B6C6] text-[#EFE3CA] font-mono-tech shadow-2xl flex flex-col justify-between select-none transform transition-transform duration-300 ease-in-out overflow-hidden ${
+        className={`fixed left-0 top-0 bottom-0 z-50 w-76 sm:w-88 bg-[#3368A0] border-r-2 border-[#C8DFDB] text-[#F2EFE7] font-mono-tech shadow-2xl flex flex-col justify-between select-none transform transition-transform duration-300 ease-in-out overflow-hidden ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         aria-label="KMRL Operations Navigation Drawer"
       >
         {/* Top Header with Portal Identity */}
         <div>
-          <div className="p-4 border-b border-[#56B6C6]/30 bg-[#120963] flex items-center justify-between">
+          <div className="p-4 border-b border-[#C8DFDB]/40 bg-[#3368A0] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#56B6C6]/50 bg-[#170C79] flex-shrink-0 shadow-xs">
+              <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#C8DFDB] bg-[#F2EFE7] flex-shrink-0 shadow-xs">
                 <img
                   src="/logo.png"
                   alt="KMRL Logo"
@@ -182,10 +186,10 @@ export const KMRLSlidingNav: React.FC<KMRLSlidingNavProps> = ({
                 />
               </div>
               <div>
-                <h3 className="font-mono-tech font-bold text-sm text-[#EFE3CA] uppercase tracking-wide">
+                <h3 className="font-mono-tech font-bold text-sm text-[#F2EFE7] uppercase tracking-wide">
                   KMRL OPERATIONS
                 </h3>
-                <span className="text-[9.5px] text-[#56B6C6] font-mono-tech font-bold uppercase tracking-widest block">
+                <span className="text-[9.5px] text-[#C8DFDB] font-mono-tech font-bold uppercase tracking-widest block">
                   EMPLOYEE PORTAL
                 </span>
               </div>
@@ -194,142 +198,125 @@ export const KMRLSlidingNav: React.FC<KMRLSlidingNavProps> = ({
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-[#170C79] hover:bg-[#56B6C6] border border-[#56B6C6]/40 text-[#EFE3CA] hover:text-[#170C79] transition-colors cursor-pointer shadow-xs"
+              className="p-1.5 rounded-lg bg-[#3368A0] hover:bg-[#2A5685] border border-[#C8DFDB] text-[#F2EFE7] transition-colors cursor-pointer shadow-xs"
               title="Close navigation panel"
               aria-label="Close navigation panel"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-[#F2EFE7]" />
             </button>
           </div>
 
           {/* Officer Details & Role Badge */}
           {user && (
-            <div className="p-3 bg-[#120963]/80 border-b border-[#56B6C6]/20 flex items-center justify-between text-xs">
+            <div className="p-3 bg-[#2A5685] border-b border-[#C8DFDB]/30 flex items-center justify-between text-xs">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#56B6C6] text-[#170C79] font-bold text-xs flex items-center justify-center shadow-xs">
+                <div className="w-8 h-8 rounded-lg bg-[#C8DFDB] text-[#3368A0] font-bold text-xs flex items-center justify-center shadow-xs">
                   {user.avatarInitials}
                 </div>
                 <div>
-                  <div className="font-bold text-[#EFE3CA] text-xs leading-tight">
+                  <div className="font-bold text-[#F2EFE7] text-xs leading-tight">
                     {user.name}
                   </div>
-                  <div className="text-[9.5px] text-[#56B6C6] font-medium">
+                  <div className="text-[9.5px] text-[#C8DFDB] font-bold">
                     {user.roleTitle}
                   </div>
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 rounded text-[8.5px] font-bold bg-[#D9A24B]/20 text-[#D9A24B] border border-[#D9A24B]/40">
+              <span className="px-2 py-0.5 rounded bg-[#C8DFDB] text-[#3368A0] border border-[#C8DFDB] text-[9px] font-bold">
                 {user.role}
               </span>
             </div>
           )}
 
-          {/* Quick Telemetry Banner */}
-          <div className="px-4 py-2 bg-[#170C79] border-b border-[#56B6C6]/20 flex items-center justify-between text-[10px]">
-            <div className="flex items-center gap-1.5 text-[#EFE3CA]">
-              <Clock className="w-3 h-3 text-[#56B6C6]" />
-              <span className="font-bold">{simTime} IST</span>
+          {/* Quick Operations Telemetry Ribbon (Real Live Clock) */}
+          <div className="px-3.5 py-2 bg-[#3368A0] border-b border-[#C8DFDB]/30 flex items-center justify-between text-[10.5px]">
+            <div className="flex items-center gap-1.5 text-[#F2EFE7] font-bold">
+              <Clock className="w-3.5 h-3.5 text-[#C8DFDB]" />
+              <span>{liveClock || simTime} IST</span>
             </div>
-            <div className="flex items-center gap-1.5 text-[#56B6C6] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#56B6C6] animate-pulse"></span>
-              <span>{activeTrainsCount}/{totalTrainsCount} UNITS ACTIVE</span>
+            <div className="text-[#F2EFE7] font-bold">
+              <span className="text-[#C8DFDB]">ACTIVE: </span>
+              {activeTrainsCount}/{totalTrainsCount} UNITS
             </div>
           </div>
         </div>
 
-        {/* Section Categorized Links List */}
+        {/* Scrollable Navigation Groups */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin">
           {NAVIGATION_GROUPS.map((group) => (
             <div key={group.category} className="space-y-1">
-              <span className="text-[9.5px] uppercase tracking-widest text-[#D9A24B] px-3 font-bold block mb-1">
+              {/* Category Header Label */}
+              <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#C8DFDB]">
                 {group.category}
-              </span>
+              </div>
 
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeItem === item.id;
+              {/* Items in this category */}
+              <div className="space-y-0.5">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeItem === item.id;
 
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item)}
-                    className={`w-full text-left p-2 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-between group ${
-                      isActive
-                        ? 'bg-[#D9A24B] text-[#170C79] font-bold shadow-md'
-                        : 'bg-[#120963]/50 hover:bg-[#120963] text-[#EFE3CA] border border-[#56B6C6]/15 hover:border-[#D9A24B]/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <div className={`p-1.5 rounded-lg border ${
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item)}
+                      className={`w-full px-2.5 py-2 rounded-xl text-left transition-colors cursor-pointer flex items-center justify-between group ${
                         isActive
-                          ? 'bg-[#170C79] text-[#D9A24B] border-[#170C79]'
-                          : 'bg-[#170C79] text-[#8ACBD0] border-[#56B6C6]/30 group-hover:text-[#D9A24B]'
-                      }`}>
-                        <Icon className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-mono-tech tracking-wide uppercase">
-                          {item.label}
-                        </div>
-                        <span className={`text-[10px] font-inter block ${
-                          isActive ? 'text-[#170C79]/80 font-medium' : 'text-[#EFE3CA]/70'
+                          ? 'bg-[#C8DFDB] text-[#3368A0] font-bold shadow-xs border border-[#C8DFDB]'
+                          : 'text-[#F2EFE7] hover:bg-[#2A5685]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className={`p-1.5 rounded-lg transition-colors flex-shrink-0 ${
+                          isActive
+                            ? 'bg-[#3368A0] text-[#F2EFE7]'
+                            : 'bg-[#C8DFDB]/20 text-[#C8DFDB] group-hover:bg-[#C8DFDB] group-hover:text-[#3368A0]'
                         }`}>
-                          {item.subtitle}
-                        </span>
+                          <Icon className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate leading-tight">
+                            {item.label}
+                          </div>
+                          <div className={`text-[9px] truncate font-inter font-medium ${
+                            isActive ? 'text-[#3368A0]/80' : 'text-[#C8DFDB]/80'
+                          }`}>
+                            {item.subtitle}
+                          </div>
+                        </div>
                       </div>
-                    </div>
 
-                    <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 ${
-                      isActive ? 'text-[#170C79]' : 'text-[#56B6C6]/60 group-hover:text-[#D9A24B]'
-                    }`} />
-                  </button>
-                );
-              })}
+                      <ChevronRight className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${
+                        isActive 
+                          ? 'text-[#3368A0] translate-x-0.5' 
+                          : 'text-[#C8DFDB] opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5'
+                      }`} />
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Footer info & Logout */}
-        <div className="p-3 border-t border-[#56B6C6]/30 bg-[#120963] space-y-2">
-          {/* Quick Role Switcher */}
-          <div className="p-2 rounded-lg bg-[#170C79] border border-[#56B6C6]/30 space-y-1.5">
-            <div className="flex items-center justify-between text-[9px] text-[#8ACBD0] font-bold uppercase">
-              <span>DEMO ROLE SWITCH</span>
-              <KeyRound className="w-3 h-3 text-[#56B6C6]" />
-            </div>
-            <div className="grid grid-cols-2 gap-1 text-[9.5px]">
-              {(['OPERATOR', 'OPERATIONS_MANAGER', 'MAINTENANCE', 'STATION_CONTROLLER', 'ADMINISTRATOR'] as UserRole[]).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => loginWithRole(r)}
-                  className={`px-1.5 py-1 rounded text-center truncate transition-colors cursor-pointer ${
-                    user?.role === r 
-                      ? 'bg-[#D9A24B] text-[#170C79] font-bold' 
-                      : 'bg-[#120963] text-[#EFE3CA] hover:bg-[#22158E]'
-                  }`}
-                >
-                  {r.replace('_', ' ')}
-                </button>
-              ))}
-            </div>
+        {/* Footer Area: Shift Status & Logout */}
+        <div className="p-3 border-t border-[#C8DFDB]/40 bg-[#2A5685] space-y-2">
+          <div className="flex items-center justify-between text-[10px] text-[#C8DFDB]">
+            <span>STATION OCC SERVER</span>
+            <span className="font-bold text-[#F2EFE7]">ONLINE (100%)</span>
           </div>
 
-          <div className="flex items-center justify-between text-[9px] text-[#EFE3CA]/60 px-1 pt-1">
-            <span className="flex items-center gap-1">
-              <Shield className="w-3 h-3 text-[#56B6C6]" /> OCC PORTAL 2026
-            </span>
-            <button
-              onClick={() => {
-                logout();
-                onClose();
-              }}
-              className="text-[#C53030] hover:underline cursor-pointer flex items-center gap-1 font-bold"
-            >
-              <LogOut className="w-3 h-3" />
-              <span>LOGOUT</span>
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              logout();
+              onClose();
+            }}
+            className="w-full py-2 px-3 rounded-xl bg-[#3368A0] hover:bg-[#C53030] border border-[#C8DFDB] text-[#F2EFE7] font-mono-tech font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-xs"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>LOG OUT OF OCC</span>
+          </button>
         </div>
       </aside>
     </>

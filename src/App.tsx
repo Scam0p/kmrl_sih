@@ -8,6 +8,8 @@ import { KMRLSlidingNav } from './components/layout/KMRLSlidingNav';
 import { FloatingOperationsDock } from './components/layout/FloatingOperationsDock';
 import { FloatingQuickActions } from './components/layout/FloatingQuickActions';
 import { PortalModal, PortalModalView } from './components/portal/PortalModal';
+import { ModeChangeConfirmModal } from './components/modals/ModeChangeConfirmModal';
+import { ScenarioChangeConfirmModal } from './components/modals/ScenarioChangeConfirmModal';
 import { HeroSection } from './components/hero/HeroSection';
 import { ControlCentre } from './components/dashboard/ControlCentre';
 import { TrainDetailDrawer } from './components/modals/TrainDetailDrawer';
@@ -23,6 +25,8 @@ const MainDashboard: React.FC = () => {
   const [portalModalView, setPortalModalView] = useState<PortalModalView>(null);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+  const [pendingCaseToConfirm, setPendingCaseToConfirm] = useState<CaseType | null>(null);
+  const [pendingScenarioToConfirm, setPendingScenarioToConfirm] = useState<ScenarioType | null>(null);
   const { checkPermission } = useAuth();
 
   const {
@@ -74,14 +78,16 @@ const MainDashboard: React.FC = () => {
 
   // Permission-guarded handlers
   const handleGuardedCaseChange = (newCase: CaseType) => {
+    if (newCase === currentCase) return;
     if (checkPermission('canChangeParadigm', 'PARADIGM SWITCH', 'Changing system control architecture requires OCC Operator or Manager clearance.')) {
-      handleCaseChange(newCase);
+      setPendingCaseToConfirm(newCase);
     }
   };
 
   const handleGuardedScenarioChange = (newScenario: ScenarioType) => {
+    if (newScenario === activeScenario) return;
     if (checkPermission('canChangeScenario', 'CONTINGENCY STRESS-TEST', 'Injecting operational disruption matrix requires OCC Operator or Administrator clearance.')) {
-      handleScenarioChange(newScenario);
+      setPendingScenarioToConfirm(newScenario);
     }
   };
 
@@ -134,10 +140,11 @@ const MainDashboard: React.FC = () => {
         onOpenPortalModal={handleOpenPortalModal}
       />
 
-      {/* 3b. Floating Bottom-Right Quick Action Buttons (Chatbot & Summary) */}
+      {/* 3b. Floating Quick Action Buttons (Left Alerts & Summary, Right AI Assistant) */}
       <FloatingQuickActions
         onOpenAssistant={() => setIsAssistantOpen(true)}
         onOpenSummary={() => setIsAnalyticsOpen(true)}
+        onOpenAlerts={() => setPortalModalView('alerts')}
       />
 
       {/* 4. Main Viewport Container */}
@@ -207,7 +214,7 @@ const MainDashboard: React.FC = () => {
         step={optimizationStep}
       />
 
-      {/* Dedicated KMRL AI Operations Assistant */}
+      {/* Dedicated AI Operations Assistant Modal */}
       <AIOperationsAssistant
         isOpen={isAssistantOpen}
         onClose={() => setIsAssistantOpen(false)}
@@ -239,6 +246,32 @@ const MainDashboard: React.FC = () => {
 
       {/* Role-Based Access Restricted Dialog */}
       <AccessRestrictedModal />
+
+      {/* Operational Mode Change Precaution Confirmation Modal */}
+      <ModeChangeConfirmModal
+        pendingCase={pendingCaseToConfirm}
+        currentCase={currentCase}
+        onConfirm={() => {
+          if (pendingCaseToConfirm) {
+            handleCaseChange(pendingCaseToConfirm);
+            setPendingCaseToConfirm(null);
+          }
+        }}
+        onCancel={() => setPendingCaseToConfirm(null)}
+      />
+
+      {/* Contingency Scenario Change Precaution Confirmation Modal */}
+      <ScenarioChangeConfirmModal
+        pendingScenario={pendingScenarioToConfirm}
+        activeScenario={activeScenario}
+        onConfirm={() => {
+          if (pendingScenarioToConfirm) {
+            handleScenarioChange(pendingScenarioToConfirm);
+            setPendingScenarioToConfirm(null);
+          }
+        }}
+        onCancel={() => setPendingScenarioToConfirm(null)}
+      />
 
       {/* Operations Portal Feature Views Modal */}
       <PortalModal

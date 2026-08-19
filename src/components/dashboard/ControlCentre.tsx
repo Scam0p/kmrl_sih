@@ -72,15 +72,9 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
   isCaseTransitioning
 }) => {
   return (
-    <div className="space-y-12 max-w-7xl mx-auto">
-      {/* 1. Paradigm Case Selector */}
-      <section id="control-deck" className="space-y-3">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
-          <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
-            OPERATIONAL PARADIGM SELECTOR
-          </span>
-        </div>
+    <div id="control-deck" className="space-y-14 md:space-y-20 font-mono-tech select-none">
+      {/* 1. Operational Paradigm Switcher (3-Way Dispatch Selector) */}
+      <section id="paradigm-switcher-section" className="space-y-4">
         <CaseSwitcher
           currentCase={currentCase}
           onSelectCase={onSelectCase}
@@ -90,12 +84,6 @@ export const ControlCentre: React.FC<ControlCentreProps> = ({
 
       {/* 2. Core Executive KPIs Ribbon */}
       <section className="space-y-3">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-2 h-2 rounded-full bg-[#56B6C6]"></span>
-          <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#56B6C6] font-bold">
-            EXECUTIVE TELEMETRY METRICS
-          </span>
-        </div>
         <KPIRibbon
           kpis={kpis}
           currentCase={currentCase}
