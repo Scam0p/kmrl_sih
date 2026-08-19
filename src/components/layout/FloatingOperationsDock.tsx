@@ -4,7 +4,6 @@ import {
   Radio, 
   Cpu, 
   AlertTriangle, 
-  BarChart2, 
   Clock, 
   Train as TrainIcon 
 } from 'lucide-react';
@@ -30,11 +29,8 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
       const scrollPos = window.scrollY + 300;
       const networkEl = document.getElementById('network-section');
       const aiEl = document.getElementById('ai-engine-section');
-      const comparisonEl = document.getElementById('comparison-section');
 
-      if (comparisonEl && scrollPos >= comparisonEl.offsetTop) {
-        setActiveSection('analytics');
-      } else if (aiEl && scrollPos >= aiEl.offsetTop) {
+      if (aiEl && scrollPos >= aiEl.offsetTop) {
         setActiveSection('ai-operations');
       } else if (networkEl && scrollPos >= networkEl.offsetTop) {
         setActiveSection('network');
@@ -81,7 +77,7 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
         </div>
       </div>
 
-      {/* Quick-Access Navigation Links (Network, AI Operations, Alerts, Analytics) */}
+      {/* Quick-Access Navigation Links (Dashboard, Live Network, AI Operations, Alerts) */}
       <div className="flex items-center gap-1 text-xs">
         {/* 1. Dashboard */}
         <button
@@ -100,7 +96,7 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
           <span className="hidden sm:inline">Dashboard</span>
         </button>
 
-        {/* 2. Live Network (Unified single entry for Network, Trains, and Fleet) */}
+        {/* 2. Live Network (Unified entry for Network & Fleet Simulation) */}
         <button
           onClick={() => scrollToElement('network-section', 'network')}
           className={`px-3 py-1.5 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold ${
@@ -136,16 +132,6 @@ export const FloatingOperationsDock: React.FC<FloatingOperationsDockProps> = ({
         >
           <AlertTriangle className="w-3.5 h-3.5 text-[#D9A24B]" />
           <span className="hidden sm:inline">Alerts</span>
-        </button>
-
-        {/* 5. Analytics */}
-        <button
-          onClick={() => onOpenPortalModal('analytics')}
-          className="px-3 py-1.5 rounded-xl text-[#EFE3CA] hover:text-[#D9A24B] hover:bg-[#22158E] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold"
-          title="Performance Analytics & Reports"
-        >
-          <BarChart2 className="w-3.5 h-3.5 text-[#56B6C6]" />
-          <span className="hidden sm:inline">Analytics</span>
         </button>
       </div>
     </nav>
