@@ -4,7 +4,6 @@ import {
   Send, 
   RotateCcw, 
   X, 
-  Sparkles, 
   ArrowRight, 
   Train as TrainIcon, 
   AlertTriangle, 
@@ -164,7 +163,6 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
     // 4. Why is T04 flagged / maintenance query
     if (q.includes('t04') || q.includes('flagged') || q.includes('breakdown') || q.includes('fault')) {
       const t04 = trains.find(t => t.id === 'T04');
-      const isMaint = t04?.status === 'MAINTENANCE';
       return {
         id: `ai-${Date.now()}`,
         sender: 'ai',
@@ -288,21 +286,17 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#170C79]/75 backdrop-blur-md animate-in fade-in duration-200 select-none">
-      <div className="relative w-full max-w-4xl h-[88vh] max-h-[750px] bg-[#8ACBD0] rounded-2xl p-2 border-2 border-[#56B6C6]/60 shadow-2xl font-mono-tech flex flex-col justify-between overflow-hidden">
-        {/* Top Window Bezel with Micro-Rivets & Master Header */}
-        <div className="flex items-center justify-between px-3 pt-2 pb-1.5 flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-            </div>
-            <div className="p-1 rounded-md bg-[#EFE3CA] border border-[#8ACBD0] text-[#170C79]">
+      <div className="relative w-full max-w-4xl h-[88vh] max-h-[750px] bg-[#EFE3CA] rounded-2xl p-4 md:p-5 border-2 border-[#8ACBD0] shadow-2xl font-mono-tech flex flex-col justify-between overflow-hidden">
+        {/* Master Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#8ACBD0] flex-shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg bg-[#170C79] text-[#EFE3CA]">
               <Bot className="w-4 h-4 text-[#56B6C6]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-mono-tech font-bold text-sm sm:text-base text-[#170C79] uppercase tracking-wide">
-                  KMRAIL OPERATIONS ASSISTANT
+                  KMRL OPERATIONS ASSISTANT
                 </h3>
                 <span className="hidden sm:inline-block text-[8.5px] font-mono-tech px-2 py-0.5 rounded bg-[#170C79] text-[#EFE3CA] font-bold">
                   OCC-PARETO-V4 • 12ms
@@ -317,7 +311,7 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handleClearChat}
-              className="px-2.5 py-1 rounded-lg bg-[#EFE3CA] hover:bg-[#FFFFFF] text-[#170C79] border border-[#8ACBD0] text-[10px] font-bold transition-colors cursor-pointer flex items-center gap-1"
+              className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] hover:bg-[#F6F1E6] text-[#170C79] border border-[#8ACBD0] text-[10px] font-bold transition-colors cursor-pointer flex items-center gap-1"
               title="Clear conversation"
             >
               <RotateCcw className="w-3 h-3" />
@@ -326,7 +320,7 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-[#EFE3CA] hover:bg-[#FFFFFF] text-[#170C79] transition-colors cursor-pointer border border-[#8ACBD0]"
+              className="p-1.5 rounded-lg bg-[#FFFFFF] hover:bg-[#F6F1E6] text-[#170C79] transition-colors cursor-pointer border border-[#8ACBD0]"
               aria-label="Close AI Assistant"
             >
               <X className="w-4 h-4" />
@@ -334,8 +328,8 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
           </div>
         </div>
 
-        {/* Inner Main Inset Panel */}
-        <div className="bg-[#EFE3CA] rounded-xl p-3 sm:p-4 border border-[#8ACBD0] shadow-inner flex flex-col justify-between flex-1 overflow-hidden space-y-3">
+        {/* Inner Main Area */}
+        <div className="flex flex-col justify-between flex-1 overflow-hidden space-y-3 pt-3">
           {/* Quick Live Status Context Panel at Top */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 p-2 rounded-xl bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs text-xs font-mono-tech flex-shrink-0">
             <div className="p-1.5 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0]/40">
@@ -394,17 +388,17 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
 
                 {/* Message Bubble */}
                 <div
-                  className={`max-w-[85%] sm:max-w-[78%] p-3.5 rounded-2xl text-xs shadow-xs font-inter leading-relaxed ${
+                  className={`max-w-[85%] sm:max-w-[78%] p-3.5 rounded-xl text-xs shadow-xs font-inter leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-[#170C79] text-[#EFE3CA] rounded-tr-none font-medium'
-                      : 'bg-[#FFFFFF] text-[#170C79] border border-[#8ACBD0] rounded-tl-none font-medium'
+                      ? 'bg-[#170C79] text-[#EFE3CA] font-medium'
+                      : 'bg-[#FFFFFF] text-[#170C79] border border-[#8ACBD0] font-medium'
                   }`}
                 >
                   <p className="whitespace-pre-line font-inter">{msg.text}</p>
 
                   {/* Rich Data Card if present */}
                   {msg.richData && msg.richData.type === 'trains' && (
-                    <div className="mt-2.5 p-2.5 rounded-xl bg-[#F6F1E6] border border-[#8ACBD0] font-mono-tech text-[11px] space-y-1">
+                    <div className="mt-2.5 p-2.5 rounded-lg bg-[#F6F1E6] border border-[#8ACBD0] font-mono-tech text-[11px] space-y-1">
                       <div className="flex justify-between font-bold text-[#170C79]">
                         <span>TRAINSET: {msg.richData.data.id}</span>
                         <span className="text-[#56B6C6]">{msg.richData.data.status}</span>
@@ -440,7 +434,7 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
 
             {isTyping && (
               <div className="flex items-center gap-2 p-2 text-xs font-mono-tech text-[#2C2B68]">
-                <Bot className="w-4 h-4 text-[#56B6C6] animate-pulse" />
+                <Bot className="w-4 h-4 text-[#56B6C6]" />
                 <span>AI analyzing corridor sensor telemetry...</span>
               </div>
             )}
@@ -457,9 +451,8 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(q)}
-                  className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] hover:bg-[#170C79] hover:text-[#EFE3CA] text-[#170C79] border border-[#8ACBD0] transition-colors cursor-pointer text-[10.5px] whitespace-nowrap font-medium flex items-center gap-1 shadow-2xs"
+                  className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] hover:bg-[#170C79] hover:text-[#EFE3CA] text-[#170C79] border border-[#8ACBD0] transition-colors cursor-pointer text-[10.5px] whitespace-nowrap font-medium shadow-2xs"
                 >
-                  <Sparkles className="w-2.5 h-2.5 text-[#D9A24B]" />
                   <span>{q}</span>
                 </button>
               ))}
@@ -479,7 +472,7 @@ export const AIOperationsAssistant: React.FC<AIOperationsAssistantProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Ask about trains, stations, incidents or operations..."
-              className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#FFFFFF] border-2 border-[#8ACBD0] focus:border-[#56B6C6] focus:outline-none text-xs font-mono-tech text-[#170C79] placeholder-[#2C2B68]/50 shadow-xs transition-colors"
+              className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#FFFFFF] border border-[#8ACBD0] focus:border-[#56B6C6] focus:outline-none text-xs font-mono-tech text-[#170C79] placeholder-[#2C2B68]/50 shadow-xs transition-colors"
             />
 
             <button

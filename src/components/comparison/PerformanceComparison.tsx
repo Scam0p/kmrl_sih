@@ -85,16 +85,11 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
   ];
 
   return (
-    <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm space-y-3">
-      {/* Top Window Bezel with Micro-Rivets & Master Benchmark Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-2 pb-2">
+    <div className="w-full rounded-xl bg-[#EFE3CA] border-2 border-[#8ACBD0] p-5 shadow-xs space-y-4">
+      {/* Master Benchmark Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#8ACBD0]">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 mr-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-          </div>
-
-          <div className="p-2 rounded-lg bg-[#EFE3CA] border border-[#8ACBD0] text-[#170C79]">
+          <div className="p-2 rounded-lg bg-[#170C79] text-[#EFE3CA]">
             <BarChart3 className="w-4 h-4 text-[#56B6C6]" />
           </div>
           <div>
@@ -108,19 +103,14 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono-tech">
-          <span className="px-3 py-1 rounded bg-[#EFE3CA] text-[#170C79] border border-[#8ACBD0] font-bold flex items-center gap-1.5 shadow-xs">
+          <span className="px-3 py-1 rounded bg-[#FFFFFF] text-[#170C79] border border-[#8ACBD0] font-bold flex items-center gap-1.5 shadow-xs">
             <Award className="w-3.5 h-3.5 text-[#56B6C6]" /> 54% EFFICIENCY ADVANTAGE
           </span>
-
-          <div className="flex items-center gap-1.5 ml-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-          </div>
         </div>
       </div>
 
-      {/* Main Quantitative Comparison Table inside Inset Pane */}
-      <div className="bg-[#EFE3CA] rounded-xl p-3 md:p-4 border border-[#8ACBD0] overflow-x-auto shadow-inner">
+      {/* Main Quantitative Comparison Table */}
+      <div className="bg-[#FFFFFF] rounded-xl p-3 md:p-4 border border-[#8ACBD0] overflow-x-auto shadow-xs">
         <table className="w-full text-left font-mono-tech text-xs border-collapse">
           <thead>
             <tr className="bg-[#170C79] text-[#EFE3CA] text-[10px] uppercase">
@@ -133,18 +123,18 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
           </thead>
           <tbody className="divide-y divide-[#8ACBD0]/40">
             {comparisonMetrics.map((metric) => (
-              <tr key={metric.name} className="hover:bg-[#8ACBD0]/30 transition-colors">
+              <tr key={metric.name} className="hover:bg-[#F6F1E6] transition-colors">
                 <td className="py-3.5 px-4 text-[#170C79]">
                   <div className="font-mono-tech font-bold text-xs">{metric.name}</div>
                   <div className="font-inter text-[11px] text-[#2C2B68]">{metric.unit}</div>
                 </td>
-                <td className="py-3.5 px-4 bg-[#FFFFFF]/60 text-[#2C2B68] font-bold">
+                <td className="py-3.5 px-4 text-[#2C2B68] font-bold">
                   {metric.manual}
                 </td>
-                <td className="py-3.5 px-4 bg-[#FFFFFF]/80 text-[#2C2B68] font-bold">
+                <td className="py-3.5 px-4 text-[#2C2B68] font-bold">
                   {metric.conventional}
                 </td>
-                <td className="py-3.5 px-4 bg-[#56B6C6]/20 text-[#170C79] font-bold text-sm">
+                <td className="py-3.5 px-4 bg-[#56B6C6]/15 text-[#170C79] font-bold text-sm">
                   {metric.ai}
                 </td>
                 <td className="py-3.5 px-4 text-[#170C79] font-bold">
@@ -156,8 +146,8 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
         </table>
       </div>
 
-      {/* Stress-Test Scenario Benchmark Tabs inside Inset Pane */}
-      <div className="bg-[#EFE3CA] rounded-xl p-4 border border-[#8ACBD0] space-y-3 shadow-inner">
+      {/* Stress-Test Scenario Benchmark Tabs */}
+      <div className="bg-[#FFFFFF] rounded-xl p-4 border border-[#8ACBD0] space-y-3 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-[10px] font-mono-tech uppercase tracking-widest text-[#170C79] font-bold">
             SCENARIO-SPECIFIC BENCHMARK PROFILES
@@ -170,7 +160,7 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono-tech transition-colors cursor-pointer ${
                   selectedScenarioIndex === idx
                     ? 'bg-[#170C79] text-[#EFE3CA] font-bold shadow-xs'
-                    : 'bg-[#FFFFFF] text-[#2C2B68] hover:text-[#170C79] hover:bg-[#8ACBD0]/40 border border-[#8ACBD0]'
+                    : 'bg-[#F6F1E6] text-[#2C2B68] hover:text-[#170C79] border border-[#8ACBD0]'
                 }`}
               >
                 {sb.name.split(' ')[0]} {sb.name.split(' ')[1]}
@@ -183,18 +173,18 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
         {(() => {
           const currentBench = scenarioBenchmarks[selectedScenarioIndex];
           return (
-            <div className="p-4 rounded-xl bg-[#8ACBD0] border-2 border-[#56B6C6] space-y-3 shadow-xs">
+            <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#8ACBD0] space-y-3 shadow-xs">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-mono-tech font-bold text-[#170C79] text-xs md:text-sm uppercase">
                   {currentBench.name}
                 </span>
-                <span className="text-xs font-mono-tech text-[#170C79] font-bold bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#56B6C6]/40 shadow-xs">
+                <span className="text-xs font-mono-tech text-[#170C79] font-bold bg-[#EFE3CA] px-2.5 py-1 rounded border border-[#8ACBD0] shadow-xs">
                   {currentBench.gain}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono-tech">
-                <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs">
+                <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0]">
                   <span className="text-[9px] text-[#2C2B68] block mb-1 font-bold">01. MANUAL TIMETABLE</span>
                   <div className="space-y-0.5 text-[#170C79]">
                     <div>Wait: <span className="text-[#2C2B68] font-bold">{currentBench.manual.wait}</span></div>
@@ -204,7 +194,7 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0] shadow-xs">
+                <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0]">
                   <span className="text-[9px] text-[#2C2B68] block mb-1 font-bold">02. CONVENTIONAL CBTC</span>
                   <div className="space-y-0.5 text-[#170C79]">
                     <div>Wait: <span className="text-[#2C2B68] font-bold">{currentBench.conventional.wait}</span></div>
@@ -214,7 +204,7 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-[#FFFFFF] border-2 border-[#56B6C6] shadow-xs">
+                <div className="p-3 rounded-lg bg-[#FFFFFF] border-2 border-[#170C79]">
                   <span className="text-[9px] text-[#170C79] font-bold block mb-1">03. AI DYNAMIC INDUCTION</span>
                   <div className="space-y-0.5 text-[#170C79]">
                     <div>Wait: <span className="text-[#170C79] font-bold">{currentBench.ai.wait}</span></div>
@@ -231,6 +221,3 @@ export const PerformanceComparison: React.FC<PerformanceComparisonProps> = () =>
     </div>
   );
 };
-
-
-

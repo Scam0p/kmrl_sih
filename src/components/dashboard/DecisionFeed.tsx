@@ -39,14 +39,9 @@ export const DecisionFeed: React.FC<DecisionFeedProps> = ({ logs }) => {
   };
 
   return (
-    <div className="w-full rounded-2xl bg-[#8ACBD0] border-2 border-[#56B6C6]/50 p-2 shadow-sm flex flex-col h-full space-y-2">
-      {/* Top Bezel with Micro-Rivets & Stream Title */}
-      <div className="flex items-center justify-between px-3 pt-2 pb-1">
-        <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-        </div>
-
+    <div className="w-full rounded-xl bg-[#EFE3CA] border-2 border-[#8ACBD0] p-5 shadow-xs flex flex-col h-full space-y-4">
+      {/* Stream Header */}
+      <div className="flex items-center justify-between pb-3 border-b border-[#8ACBD0]">
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-[#56B6C6]" />
           <h3 className="font-mono-tech font-bold text-sm md:text-base text-[#170C79] uppercase tracking-wide">
@@ -54,62 +49,45 @@ export const DecisionFeed: React.FC<DecisionFeedProps> = ({ logs }) => {
           </h3>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#170C79]/40"></span>
+        <div className="flex items-center gap-1.5 text-[9.5px] font-mono-tech text-[#170C79] bg-[#FFFFFF] px-2.5 py-0.5 rounded border border-[#8ACBD0] font-bold shadow-xs">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2E8B57]"></span>
+          <span>LIVE STREAM</span>
         </div>
       </div>
 
-      {/* Inner Inset Viewport Pane */}
-      <div className="bg-[#EFE3CA] rounded-xl p-4 md:p-5 border border-[#8ACBD0] flex flex-col justify-start flex-1 shadow-inner">
-        {/* Stream Status Sub-header */}
-        <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#8ACBD0]">
-          <span className="text-[10px] font-mono-tech text-[#2C2B68] font-bold">
-            REAL-TIME AUDIT LOG
-          </span>
-          <div className="flex items-center gap-1.5 text-[9.5px] font-mono-tech text-[#170C79] bg-[#FFFFFF] px-2.5 py-0.5 rounded border border-[#8ACBD0] font-bold shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#56B6C6] animate-pulse"></span>
-            <span>LIVE STREAM</span>
-          </div>
-        </div>
+      {/* Stream Audit Log List */}
+      <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[440px] pr-1 font-mono-tech text-xs scrollbar-thin">
+        {logs.map((log) => {
+          const Icon = getIcon(log.type);
+          const badgeClass = getBadgeStyle(log.type);
 
-        {/* Stream List */}
-        <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[380px] pr-1 font-mono-tech text-xs">
-          {logs.map((log) => {
-            const Icon = getIcon(log.type);
-            const badgeClass = getBadgeStyle(log.type);
-
-            return (
-              <div
-                key={log.id}
-                className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0] hover:border-[#56B6C6] transition-colors shadow-xs"
-              >
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <div className="flex items-center gap-1.5">
-                    <Icon className="w-3.5 h-3.5 text-[#2C2B68]" />
-                    <span className={`text-[8px] font-mono-tech font-bold px-1.5 py-0.5 rounded border ${badgeClass}`}>
-                      {log.type}
-                    </span>
-                    <span className="font-mono-tech font-bold text-[#170C79] text-[11px] truncate">
-                      {log.title}
-                    </span>
-                  </div>
-                  <span className="text-[9px] font-mono-tech text-[#2C2B68] whitespace-nowrap">
-                    {log.time}
+          return (
+            <div
+              key={log.id}
+              className="p-3 rounded-lg bg-[#FFFFFF] border border-[#8ACBD0] hover:border-[#56B6C6] transition-colors shadow-xs"
+            >
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-center gap-1.5">
+                  <Icon className="w-3.5 h-3.5 text-[#2C2B68]" />
+                  <span className={`text-[8px] font-mono-tech font-bold px-1.5 py-0.5 rounded border ${badgeClass}`}>
+                    {log.type}
+                  </span>
+                  <span className="font-mono-tech font-bold text-[#170C79] text-[11px] truncate">
+                    {log.title}
                   </span>
                 </div>
-
-                <p className="font-inter text-xs text-[#2C2B68] font-medium leading-relaxed pl-3 border-l-2 border-[#8ACBD0] mt-1.5">
-                  {log.detail}
-                </p>
+                <span className="text-[9px] font-mono-tech text-[#2C2B68] whitespace-nowrap">
+                  {log.time}
+                </span>
               </div>
-            );
-          })}
-        </div>
+
+              <p className="font-inter text-xs text-[#2C2B68] font-medium leading-relaxed pl-2 border-l border-[#8ACBD0] mt-1.5">
+                {log.detail}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
-
-
-
